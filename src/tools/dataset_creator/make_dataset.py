@@ -34,9 +34,7 @@ for sources_path in sources_paths:
 		ratio = old_size / compressed_size
 
 		compress_flag = True
-		if ratio < 1.0:
-			compress_flag = False
-		elif ratio - 1.0 < .15:
+		if ratio - 1.0 < .1:
 			compress_flag = False
 
 		data.append([old_size, file_extension.upper().replace('.', ''), entropy, int(compress_flag)])
