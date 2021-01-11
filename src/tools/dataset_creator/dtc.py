@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 import joblib
@@ -19,6 +20,7 @@ target = ds['need_compression']
 type_encoder = LabelEncoder()
 
 inputs['type'] = type_encoder.fit_transform(inputs['type'])
+np.save('encoder_classes.npy', type_encoder.classes_)
 
 
 #----------------
