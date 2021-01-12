@@ -35,7 +35,7 @@ def fill_file_data_contract(request_data: object) -> file_data_contract:
 		model.type = request_data['fileType']
 		model.entropy = request_data['fileEntropy']
 
-		log.info('Model deserealized')
+		log.info('Model deserialized')
 		
 		return model
 	except request_deserialization_exception as error:

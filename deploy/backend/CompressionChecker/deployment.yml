@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cc-deployment
+  labels:
+    app: opti-cc
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: opti-cc
+  template:
+    metadata:
+      labels:
+        app: opti-cc
+    spec:
+      containers:
+        - name: compressionchecker
+          image: yoyrandao/cc:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5555
