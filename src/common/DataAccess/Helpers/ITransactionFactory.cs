@@ -1,7 +1,7 @@
 ﻿namespace DataAccess.Helpers
 {
-    public interface ISqlTransactionFactory
+    public interface ITransactionFactory
     {
-        
+        ISqlTransactionScope BeginTransaction();
     }
 }

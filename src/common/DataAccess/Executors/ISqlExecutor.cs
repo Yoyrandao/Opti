@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 
-namespace DataAccess
+namespace DataAccess.Executors
 {
     public interface ISqlExecutor
     {
-        IEnumerable<T> List<T>(string query, object param = null);
+        IEnumerable<T> List<T>(string query, object @params = null);
 
-        T Get<T>(string query, object param = null);
+        T Get<T>(string query, object @params = null);
 
-        void Execute(string query, object param = null);
+        void Execute(string query, object @params = null);
     }
 }

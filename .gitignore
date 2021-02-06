@@ -13,6 +13,10 @@ src/tools/dataset_creator/sources/images/*.jpg
 *.csv
 tree.png
 
+*.list
+
+appsettings.*.json
+
 # User-specific files
 *.rsuser
 *.suo

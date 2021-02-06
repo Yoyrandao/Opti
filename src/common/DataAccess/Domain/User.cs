@@ -1,7 +1,13 @@
-﻿namespace DataAccess.Domain
+﻿using System;
+
+namespace DataAccess.Domain
 {
-    public class User
+    public record User : BaseEntity
     {
+        public Guid AccountUid { get; init; }
         
+        public string Login { get; init; }
+        
+        public string Folder { get; init; }
     }
 }

@@ -1,7 +1,9 @@
-﻿namespace DataAccess.Helpers
+﻿using System;
+
+namespace DataAccess.Helpers
 {
-    public interface ISqlTransactionScope
+    public interface ISqlTransactionScope : IDisposable
     {
-        
+        void Commit();
     }
 }

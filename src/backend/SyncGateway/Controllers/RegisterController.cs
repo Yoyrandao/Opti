@@ -1,13 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DataAccess.Repositories;
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace SyncGateway.Controllers
 {
+    [Route("/register")]
+    [ApiController]
     public class RegisterController : Controller
     {
-        // GET
-        public IActionResult Index()
+        public RegisterController(IUserRepository userRepository)
         {
-            return View();
+            _userRepository = userRepository;
         }
+        
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return Ok(_userRepository.GetById(1));
+        }
+
+        private readonly IUserRepository _userRepository;
     }
 }

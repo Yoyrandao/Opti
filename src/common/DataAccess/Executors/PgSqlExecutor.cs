@@ -1,23 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+
+using CommonTypes.Configuration;
+using CommonTypes.Extensions;
+
+using Dapper;
 
 using Npgsql;
 
-namespace DataAccess
+namespace DataAccess.Executors
 {
     public class PgSqlExecutor : ISqlExecutor
     {
-        
-        
-        public IEnumerable<T> List<T>(string query, object param = null) => throw new System.NotImplementedException();
-
-        public T Get<T>(string query, object param = null) => throw new System.NotImplementedException();
-
-        public void Execute(string query, object param = null)
+        public PgSqlExecutor(DatabaseConnectionSettings connectionSettings)
         {
-            throw new System.NotImplementedException();
+            _connectionString = connectionSettings.Build();
         }
 
+        #region Implementation of ISqlTransactionScope
+
+        public IEnumerable<T> List<T>(string query, object @params = null)
+        {
+            return Process(connection => connection.Query<T>(query, @params));
+        }
+
+        public T Get<T>(string query, object @params = null)
+        {
+            return Process(connection => connection.Query<T>(query, @params))
+               .SingleOrDefault();
+        }
+
+        public void Execute(string query, object @params = null)
+        {
+            Process(connecton => connecton.Query(query, @params));
+        }
+
+        #endregion
+        
         private T Process<T>(Func<NpgsqlConnection, T> func)
         {
             using (var connection = new NpgsqlConnection(_connectionString))

@@ -1,20 +1,35 @@
-﻿namespace DataAccess.Helpers
+﻿using System.Transactions;
+
+namespace DataAccess.Helpers
 {
-    public class SqlTransactionFactory : ISqlTransactionScope
+    public class SqlTransactionScope : ISqlTransactionScope
     {
+        public SqlTransactionScope()
+        {
+            _transactionScope = new TransactionScope(
+                TransactionScopeOption.Required,
+                new TransactionOptions
+                {
+                    Timeout = TransactionManager.DefaultTimeout,
+                    IsolationLevel = IsolationLevel.ReadCommitted
+                },
+                TransactionScopeAsyncFlowOption.Enabled);
+        }
+        
         #region Implementation of ISqlTransactionScope
 
         public void Dispose()
         {
-            throw new System.NotImplementedException();
+            _transactionScope.Dispose();
         }
 
         public void Commit()
         {
-            throw new System.NotImplementedException();
+            _transactionScope.Complete();
         }
 
         #endregion
-        
+
+        private readonly TransactionScope _transactionScope;
     }
 }
