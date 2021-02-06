@@ -20,8 +20,10 @@ namespace SyncGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddConfigurationTypes(Configuration);
-            services.AddDataAccess();
+            services
+               .AddConfigurationTypes(Configuration)
+               .AddDataAccess()
+               .AddProcessors();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

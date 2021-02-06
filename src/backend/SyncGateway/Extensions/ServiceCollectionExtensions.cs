@@ -7,6 +7,7 @@ using DataAccess.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+using SyncGateway.Processors;
 
 namespace SyncGateway.Extensions
 {
@@ -20,6 +21,7 @@ namespace SyncGateway.Extensions
             services.AddTransient<ITransactionFactory, SqlTransactionFactory>();
 
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IFilePartRepository, FilePartRepository>();
 
             return services;
         }
@@ -31,6 +33,13 @@ namespace SyncGateway.Extensions
             
             configuration.Bind("DatabaseConnection", databaseConnectionSettings);
             services.AddSingleton(databaseConnectionSettings);
+
+            return services;
+        }
+
+        public static IServiceCollection AddProcessors(this IServiceCollection services)
+        {
+            services.AddTransient<IFileProcessor, FileProcessor>();
 
             return services;
         }

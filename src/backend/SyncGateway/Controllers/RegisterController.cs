@@ -1,6 +1,9 @@
-﻿using DataAccess.Repositories;
+﻿using DataAccess.Domain;
+using DataAccess.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
+
+using SyncGateway.Processors;
 
 namespace SyncGateway.Controllers
 {
@@ -8,17 +11,17 @@ namespace SyncGateway.Controllers
     [ApiController]
     public class RegisterController : Controller
     {
-        public RegisterController(IUserRepository userRepository)
+        public RegisterController(IFileProcessor repository)
         {
-            _userRepository = userRepository;
+            _repository = repository;
         }
         
         [HttpGet]
         public IActionResult Register()
         {
-            return Ok(_userRepository.GetById(1));
+            return Ok(_repository.GetFilesFromFolder("folder"));
         }
 
-        private readonly IUserRepository _userRepository;
+        private readonly IFileProcessor _repository;
     }
 }

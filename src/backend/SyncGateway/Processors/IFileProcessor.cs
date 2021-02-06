@@ -1,7 +1,11 @@
-﻿namespace SyncGateway.Processors
+﻿using System.Collections.Generic;
+
+using DataAccess.Domain;
+
+namespace SyncGateway.Processors
 {
-    public class IFileProcessor
+    public interface IFileProcessor
     {
-        
+        IEnumerable<File> GetFilesFromFolder(string folder);
     }
 }

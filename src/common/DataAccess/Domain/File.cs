@@ -1,7 +1,9 @@
-﻿namespace DataAccess.Domain
+﻿using System.Collections.Generic;
+
+namespace DataAccess.Domain
 {
-    public class File
+    public record File
     {
-        
+        public IList<FilePart> Parts { get; init; } = new List<FilePart>();
     }
 }
