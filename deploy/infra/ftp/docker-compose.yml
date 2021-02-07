@@ -7,15 +7,10 @@ services:
    - '21:21'
    - '30000-30009:30000-30009'
   volumes:
-   - storage:/home/<LOGIN>
+   - storage:/home/api_service
    - user_data:/etc/pure-ftpd/passwd
-   - /home/opti/ftp/private:/etc/ssl/private
-  environment:
-   PUBLICHOST: "localhost"
-   FTP_USER_NAME: "<LOGIN>"
-   FTP_USER_PASS: "<PASSWORD>"
-   FTP_USER_HOME: /home/<LOGIN>
-   ADDED_FLAGS: "--tls=2 -d -d"
+  env_file:
+   - env.list
   restart: always
 volumes:
  storage:

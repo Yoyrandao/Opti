@@ -8,6 +8,8 @@ namespace SyncGateway.Processors
 {
     public class FileProcessor : IFileProcessor
     {
+        private readonly IFilePartRepository _filePartRepository;
+
         public FileProcessor(IFilePartRepository filePartRepository)
         {
             _filePartRepository = filePartRepository;
@@ -34,9 +36,7 @@ namespace SyncGateway.Processors
                     current = _filePartRepository.GetByParentId(current.Id);
 
                     if (current == null)
-                    {
                         break;
-                    }
 
                     file.Parts.Add(current);
                 }
@@ -48,7 +48,5 @@ namespace SyncGateway.Processors
         }
 
         #endregion
-
-        private readonly IFilePartRepository _filePartRepository;
     }
 }

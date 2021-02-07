@@ -11,7 +11,7 @@ namespace DataAccess.Repositories
         FilePart GetById(int id);
 
         FilePart GetByParentId(int parentId);
-        
+
         IEnumerable<FilePart> GetAll();
 
         IEnumerable<FilePart> GetAllFromFolder(string folder);

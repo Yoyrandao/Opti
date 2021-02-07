@@ -5,27 +5,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-using SyncGateway.Extensions;
+using SyncGateway.Installers;
 
 namespace SyncGateway
 {
     public class Startup
     {
+        private IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        private IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
             services
-               .AddConfigurationTypes(Configuration)
-               .AddDataAccess()
-               .AddProcessors();
+               .InstallDataAccess()
+               .InstallFtpDataAccess()
+               .InstallConfigurationTypes(Configuration)
+               .InstallLogic()
+               .InstallUtils()
+               .InstallShields();
 
             services.AddControllers();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SyncGateway", Version = "v1" });

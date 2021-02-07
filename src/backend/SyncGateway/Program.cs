@@ -16,17 +16,16 @@ namespace SyncGateway
                .ConfigureAppConfiguration((context, configurationBuilder) =>
                 {
                     configurationBuilder.Sources.Clear();
+
                     configurationBuilder
                        .SetBasePath(context.HostingEnvironment.ContentRootPath)
-                       .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                       .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true,
-                            reloadOnChange: true)
+                       .AddJsonFile("appsettings.json", true, true)
+                       .AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", true,
+                            true)
                        .AddEnvironmentVariables();
 
                     if (args != null)
-                    {
                         configurationBuilder.AddCommandLine(args);
-                    }
                 })
                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }

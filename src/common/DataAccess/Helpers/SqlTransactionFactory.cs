@@ -4,10 +4,7 @@
     {
         #region Implementation of ITransactionFactory
 
-        public ISqlTransactionScope BeginTransaction()
-        {
-            return new SqlTransactionScope();
-        }
+        public ISqlTransactionScope BeginTransaction() => new SqlTransactionScope();
 
         #endregion
     }

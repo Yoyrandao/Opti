@@ -7,6 +7,8 @@ namespace DataAccess.Repositories
 {
     public class FilePartRepository : IFilePartRepository
     {
+        private readonly ISqlExecutor _executor;
+
         public FilePartRepository(ISqlExecutor executor)
         {
             _executor = executor;
@@ -18,13 +20,8 @@ namespace DataAccess.Repositories
         {
             const string query = @"SELECT * FROM public.addFilePart(@FileName, @Folder, @ParentId, @Compressed)";
 
-            return _executor.Get<int>(query, new
-            {
-                FileName = part.PartName,
-                Folder = part.Folder,
-                ParentId = part.ParentId,
-                Compressed = part.Compressed
-            });
+            return _executor.Get<int>(query,
+                new { FileName = part.PartName, part.Folder, part.ParentId, part.Compressed });
         }
 
         public FilePart GetById(int id)
@@ -39,10 +36,7 @@ namespace DataAccess.Repositories
                                    FROM public.fileParts fp
                                    WHERE fp.id = @Id";
 
-            return _executor.Get<FilePart>(query, new
-            {
-                Id = id
-            });
+            return _executor.Get<FilePart>(query, new { Id = id });
         }
 
         public FilePart GetByParentId(int parentId)
@@ -57,10 +51,7 @@ namespace DataAccess.Repositories
                                    FROM public.fileParts fp
                                    WHERE fp.parentId = @Parent";
 
-            return _executor.Get<FilePart>(query, new
-            {
-                Parent = parentId
-            });
+            return _executor.Get<FilePart>(query, new { Parent = parentId });
         }
 
         public IEnumerable<FilePart> GetAll()
@@ -89,14 +80,9 @@ namespace DataAccess.Repositories
                                    FROM public.fileParts fp
                                    WHERE fp.folder LIKE @Folder";
 
-            return _executor.List<FilePart>(query, new
-            {
-                Folder = folder
-            });
+            return _executor.List<FilePart>(query, new { Folder = folder });
         }
 
         #endregion
-
-        private readonly ISqlExecutor _executor;
     }
 }

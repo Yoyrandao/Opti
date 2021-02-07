@@ -17,6 +17,8 @@
     <ItemGroup>
       <ProjectReference Include="..\..\common\CommonTypes\CommonTypes.csproj" />
       <ProjectReference Include="..\..\common\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\..\common\FtpDataAccess\FtpDataAccess.csproj" />
+      <ProjectReference Include="..\..\common\Utils\Utils.csproj" />
     </ItemGroup>
 
 </Project>

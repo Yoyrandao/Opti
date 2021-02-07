@@ -41,10 +41,16 @@ $local:primaryDatabase = [System.Environment]::GetEnvironmentVariable('PG_DATABA
 
 if (-not($withoutDockerCompose)) {
   Write-Host 'Reacreating database container...' -ForegroundColor Blue;
-  docker rm -f common_database
+  docker rm -f common_database;
   docker volume rm postgres_db_data;
   docker-compose -f ./external/postgres/docker-compose.yml up -d --force-recreate;
   Write-Host 'Done.' -ForegroundColor Green;
+
+	Write-Host 'Recreating ftp container...' -ForegroundColor Blue;
+	docker rm -f ftp_server;
+	docker volume rm ftp_storage ftp_user_data;
+	docker-compose -f ./infra/ftp/docker-compose.yml up -d --force-recreate;
+	Write-Host 'Done.' -ForegroundColor Green;
 }
 
 Write-Host 'Recreating database...' -ForegroundColor Blue;

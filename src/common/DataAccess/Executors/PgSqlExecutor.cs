@@ -13,9 +13,21 @@ namespace DataAccess.Executors
 {
     public class PgSqlExecutor : ISqlExecutor
     {
-        public PgSqlExecutor(DatabaseConnectionSettings connectionSettings)
+        private readonly string _connectionString;
+
+        public PgSqlExecutor(DatabaseConnectionOptions connectionOptions)
         {
-            _connectionString = connectionSettings.Build();
+            _connectionString = connectionOptions.Build();
+        }
+
+        private T Process<T>(Func<NpgsqlConnection, T> func)
+        {
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                connection.Open();
+
+                return func(connection);
+            }
         }
 
         #region Implementation of ISqlTransactionScope
@@ -37,17 +49,5 @@ namespace DataAccess.Executors
         }
 
         #endregion
-        
-        private T Process<T>(Func<NpgsqlConnection, T> func)
-        {
-            using (var connection = new NpgsqlConnection(_connectionString))
-            {
-                connection.Open();
-
-                return func(connection);
-            }
-        }
-
-        private readonly string _connectionString;
     }
 }
