@@ -4,7 +4,7 @@ using System.Linq;
 using DataAccess.Domain;
 using DataAccess.Repositories;
 
-namespace SyncGateway.Processors
+namespace SyncGateway.Processing
 {
     public class FileProcessor : IFileProcessor
     {

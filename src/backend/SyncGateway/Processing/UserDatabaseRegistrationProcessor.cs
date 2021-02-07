@@ -5,9 +5,9 @@ using SyncGateway.Exceptions;
 
 using Utils.Retrying;
 
-namespace SyncGateway.Processors
+namespace SyncGateway.Processing
 {
-    public class UserDatabaseRegistrationProcessor : IProcessor
+    public class UserDatabaseRegistrationProcessor : BasicProcessor
     {
         private readonly IRepeater<UserNotInDatabaseException> _repeater;
 
@@ -22,7 +22,7 @@ namespace SyncGateway.Processors
 
         #region Implementation of IProcessor
 
-        public void Process(object contract)
+        public override void Process(object contract)
         {
             var data = contract as RegistrationContract;
             _userRepository.Register(data!.Username);
@@ -32,6 +32,8 @@ namespace SyncGateway.Processors
                 if (_userRepository.GetByLogin(data.Username) == null)
                     throw new UserNotInDatabaseException();
             });
+
+            Successor?.Process(contract);
         }
 
         #endregion

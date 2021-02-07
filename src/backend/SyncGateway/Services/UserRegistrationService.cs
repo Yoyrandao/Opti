@@ -1,25 +1,24 @@
 ﻿using SyncGateway.Contracts.In;
-using SyncGateway.Processors;
+using SyncGateway.Processing;
 
 namespace SyncGateway.Services
 {
     public class UserRegistrationService : IUserRegistrationService
     {
-        private readonly IProcessor[] _processors;
-
-        public UserRegistrationService(IProcessor[] processors)
+        public UserRegistrationService(OperationTask processingTask)
         {
-            _processors = processors;
+            _processingTask = processingTask;
         }
 
         #region Implementation of IUserRegistrationService
 
         public void Register(RegistrationContract contract)
         {
-            foreach (var processor in _processors)
-                processor.Process(contract);
+            _processingTask.Process(contract);
         }
 
         #endregion
+
+        private readonly OperationTask _processingTask;
     }
 }

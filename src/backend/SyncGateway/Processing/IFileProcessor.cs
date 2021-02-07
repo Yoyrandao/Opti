@@ -2,7 +2,7 @@
 
 using DataAccess.Domain;
 
-namespace SyncGateway.Processors
+namespace SyncGateway.Processing
 {
     public interface IFileProcessor
     {

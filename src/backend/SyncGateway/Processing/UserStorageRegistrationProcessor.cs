@@ -7,9 +7,9 @@ using SyncGateway.Exceptions;
 
 using Utils.Retrying;
 
-namespace SyncGateway.Processors
+namespace SyncGateway.Processing
 {
-    public class UserStorageRegistrationProcessor : IProcessor
+    public class UserStorageRegistrationProcessor : BasicProcessor
     {
         private readonly IRepeater<UserFolderNotCreatedException> _repeater;
 
@@ -24,7 +24,7 @@ namespace SyncGateway.Processors
 
         #region Implementation of IProcessor
 
-        public void Process(object contract)
+        public override void Process(object contract)
         {
             try
             {
@@ -38,6 +38,8 @@ namespace SyncGateway.Processors
                     if (!_storageRepository.IsFolderExists(folder))
                         throw new UserFolderNotCreatedException();
                 });
+
+                Successor?.Process(contract);
             }
             catch (SocketException)
             {
