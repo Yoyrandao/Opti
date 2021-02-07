@@ -9,8 +9,8 @@ using SyncGateway.Services;
 
 namespace SyncGateway.Controllers
 {
-    [Route(Routes.User.Registration)]
     [ApiController]
+    [Route(Routes.User.Registration)]
     public class RegisterController : Controller
     {
         public RegisterController(IUserRegistrationService registrationService, IExceptionShield<ApiResponse> shield)
@@ -35,7 +35,7 @@ namespace SyncGateway.Controllers
             return result.Error == null ? Ok(result) : BadRequest(result);
         }
 
-        private readonly IUserRegistrationService _registrationService;
         private readonly IExceptionShield<ApiResponse> _shield;
+        private readonly IUserRegistrationService _registrationService;
     }
 }

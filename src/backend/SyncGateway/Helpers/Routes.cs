@@ -4,7 +4,7 @@
     {
         public const string Root = "/api";
 
-        public static class User
+        internal static class User
         {
             public const string Registration = Root + "/register";
         }

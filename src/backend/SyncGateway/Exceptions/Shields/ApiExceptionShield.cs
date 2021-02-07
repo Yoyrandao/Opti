@@ -3,6 +3,8 @@ using System.Net.Sockets;
 
 using CommonTypes.Constants;
 
+using EnsureThat;
+
 using Npgsql;
 
 using SyncGateway.Contracts.Out;
@@ -15,6 +17,8 @@ namespace SyncGateway.Exceptions.Shields
 
         public ApiResponse Protect(Func<ApiResponse> func)
         {
+            EnsureArg.IsNotNull(func);
+
             try
             {
                 return func();

@@ -1,5 +1,7 @@
 ﻿using System.Net.Sockets;
 
+using EnsureThat;
+
 using FtpDataAccess.Repositories;
 
 using SyncGateway.Contracts.In;
@@ -26,6 +28,8 @@ namespace SyncGateway.Processing
 
         public override void Process(object contract)
         {
+            EnsureArg.IsNotNull(contract);
+
             try
             {
                 var data = contract as RegistrationContract;

@@ -1,5 +1,7 @@
 ﻿using DataAccess.Repositories;
 
+using EnsureThat;
+
 using SyncGateway.Contracts.In;
 using SyncGateway.Exceptions;
 
@@ -24,12 +26,14 @@ namespace SyncGateway.Processing
 
         public override void Process(object contract)
         {
-            var data = contract as RegistrationContract;
-            _userRepository.Register(data!.Username);
+            EnsureArg.IsNotNull(contract);
+
+            var username = (contract as RegistrationContract)!.Username;
+            _userRepository.Register(username);
 
             _repeater.Process(() =>
             {
-                if (_userRepository.GetByLogin(data.Username) == null)
+                if (_userRepository.GetByLogin(username) == null)
                     throw new UserNotInDatabaseException();
             });
 
