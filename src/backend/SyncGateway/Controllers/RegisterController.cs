@@ -4,17 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using SyncGateway.Contracts.In;
 using SyncGateway.Contracts.Out;
 using SyncGateway.Exceptions.Shields;
+using SyncGateway.Helpers;
 using SyncGateway.Services;
 
 namespace SyncGateway.Controllers
 {
-    [Route("/register")]
+    [Route(Routes.User.Registration)]
     [ApiController]
     public class RegisterController : Controller
     {
-        private readonly IUserRegistrationService _registrationService;
-        private readonly IExceptionShield<ApiResponse> _shield;
-
         public RegisterController(IUserRegistrationService registrationService, IExceptionShield<ApiResponse> shield)
         {
             _shield = shield;
@@ -36,5 +34,8 @@ namespace SyncGateway.Controllers
 
             return result.Error == null ? Ok(result) : BadRequest(result);
         }
+
+        private readonly IUserRegistrationService _registrationService;
+        private readonly IExceptionShield<ApiResponse> _shield;
     }
 }
