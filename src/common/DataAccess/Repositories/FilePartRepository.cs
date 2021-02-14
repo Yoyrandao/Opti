@@ -7,14 +7,24 @@ namespace DataAccess.Repositories
 {
     public class FilePartRepository : IFilePartRepository
     {
-        private readonly ISqlExecutor _executor;
-
         public FilePartRepository(ISqlExecutor executor)
         {
             _executor = executor;
         }
 
         #region Implementation of IFilePartRepository
+
+        public bool IsFilePartExists(string folder, string partName)
+        {
+            const string query = @"SELECT COUNT(*) 
+                                   FROM public.fileParts fp
+                                   WHERE fp.folder = @Folder
+                                       AND fp.partname = @Name";
+
+            var result = _executor.Get<int>(query, new { Folder = folder, Name = partName });
+
+            return result == 1;
+        }
 
         public int AddAndReturnId(FilePart part)
         {
@@ -84,5 +94,7 @@ namespace DataAccess.Repositories
         }
 
         #endregion
+        
+        private readonly ISqlExecutor _executor;
     }
 }

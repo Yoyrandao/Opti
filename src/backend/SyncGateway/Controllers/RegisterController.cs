@@ -10,7 +10,6 @@ using SyncGateway.Services;
 namespace SyncGateway.Controllers
 {
     [ApiController]
-    [Route(Routes.User.Registration)]
     public class RegisterController : Controller
     {
         public RegisterController(IUserRegistrationService registrationService, IExceptionShield<ApiResponse> shield)
@@ -20,6 +19,7 @@ namespace SyncGateway.Controllers
         }
 
         [HttpPost]
+        [Route(Routes.User.Registration)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

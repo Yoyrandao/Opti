@@ -11,9 +11,9 @@ using SyncGateway.Exceptions;
 
 namespace SyncGateway.Processing
 {
-    public class ChangeSetFilterProcessor : BasicProcessor
+    public class ChangeSetFilteringProcessor : BasicProcessor
     {
-        public ChangeSetFilterProcessor(IStorageRepository storageRepository, IFilePartRepository filePartRepository)
+        public ChangeSetFilteringProcessor(IStorageRepository storageRepository, IFilePartRepository filePartRepository)
         {
             _storageRepository = storageRepository;
             _filePartRepository = filePartRepository;

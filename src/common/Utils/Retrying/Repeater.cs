@@ -6,8 +6,6 @@ namespace Utils.Retrying
 {
     public class Repeater<T> : IRepeater<T>
     {
-        private readonly Policy _policy;
-
         public Repeater(Policy policy)
         {
             _policy = policy;
@@ -21,5 +19,7 @@ namespace Utils.Retrying
         }
 
         #endregion
+        
+        private readonly Policy _policy;
     }
 }

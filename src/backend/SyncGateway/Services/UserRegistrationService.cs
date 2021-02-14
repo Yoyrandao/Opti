@@ -18,7 +18,7 @@ namespace SyncGateway.Services
         }
 
         #endregion
-
+        
         private readonly OperationTask _processingTask;
     }
 }

@@ -2,6 +2,6 @@
 {
     public interface IHashProvider
     {
-        
+        string Hash(string content);
     }
 }

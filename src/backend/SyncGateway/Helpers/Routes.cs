@@ -2,7 +2,12 @@
 {
     public static class Routes
     {
-        public const string Root = "/api";
+        private const string Root = "/api";
+
+        internal static class Fs
+        {
+            public const string Update = Root + "/update";
+        }
 
         internal static class User
         {

@@ -8,8 +8,6 @@ namespace FtpDataAccess.Repositories
 {
     public class StorageRepository : IStorageRepository, IDisposable
     {
-        private readonly IFtpClient _client;
-
         public StorageRepository(IFtpConnectionFactory connectionFactory)
         {
             _client = connectionFactory.Create();
@@ -44,5 +42,7 @@ namespace FtpDataAccess.Repositories
         }
 
         #endregion
+        
+        private readonly IFtpClient _client;
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FtpDataAccess.Repositories
+﻿namespace FtpDataAccess.Repositories
 {
     public interface IStorageRepository
     {

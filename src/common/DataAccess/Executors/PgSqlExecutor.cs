@@ -13,8 +13,6 @@ namespace DataAccess.Executors
 {
     public class PgSqlExecutor : ISqlExecutor
     {
-        private readonly string _connectionString;
-
         public PgSqlExecutor(DatabaseConnectionOptions connectionOptions)
         {
             _connectionString = connectionOptions.Build();
@@ -30,7 +28,7 @@ namespace DataAccess.Executors
             }
         }
 
-        #region Implementation of ISqlTransactionScope
+        #region Implementation of ISqlExecutor
 
         public IEnumerable<T> List<T>(string query, object @params = null)
         {
@@ -49,5 +47,7 @@ namespace DataAccess.Executors
         }
 
         #endregion
+        
+        private readonly string _connectionString;
     }
 }

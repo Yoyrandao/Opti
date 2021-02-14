@@ -6,6 +6,8 @@ namespace DataAccess.Repositories
 {
     public interface IFilePartRepository
     {
+        bool IsFilePartExists(string folder, string partName);
+
         int AddAndReturnId(FilePart part);
 
         FilePart GetById(int id);

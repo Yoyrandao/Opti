@@ -11,18 +11,14 @@ namespace SyncGateway.Processing
 {
     public class UserDatabaseRegistrationProcessor : BasicProcessor
     {
-        private readonly IRepeater<UserNotInDatabaseException> _repeater;
-
-        private readonly IUserRepository _userRepository;
-
-        public UserDatabaseRegistrationProcessor(IUserRepository userRepository,
-            IRepeater<UserNotInDatabaseException> repeater)
+        public UserDatabaseRegistrationProcessor(IUserRepository                       userRepository,
+                                                 IRepeater<UserNotInDatabaseException> repeater)
         {
             _userRepository = userRepository;
             _repeater = repeater;
         }
 
-        #region Implementation of IProcessor
+        #region Implementation of BasicProcessor
 
         public override void Process(object contract)
         {
@@ -41,5 +37,8 @@ namespace SyncGateway.Processing
         }
 
         #endregion
+
+        private readonly IRepeater<UserNotInDatabaseException> _repeater;
+        private readonly IUserRepository _userRepository;
     }
 }

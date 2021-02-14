@@ -8,8 +8,6 @@ namespace SyncGateway.Processing
 {
     public class FileProcessor : IFileProcessor
     {
-        private readonly IFilePartRepository _filePartRepository;
-
         public FileProcessor(IFilePartRepository filePartRepository)
         {
             _filePartRepository = filePartRepository;
@@ -48,5 +46,7 @@ namespace SyncGateway.Processing
         }
 
         #endregion
+        
+        private readonly IFilePartRepository _filePartRepository;
     }
 }

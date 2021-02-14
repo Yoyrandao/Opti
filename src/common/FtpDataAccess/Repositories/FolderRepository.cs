@@ -12,8 +12,6 @@ namespace FtpDataAccess.Repositories
 {
     public class FolderRepository : IFolderRepository, IDisposable
     {
-        private readonly IFtpClient _client;
-
         public FolderRepository(IFtpConnectionFactory connectionFactory)
         {
             _client = connectionFactory.Create();
@@ -66,5 +64,7 @@ namespace FtpDataAccess.Repositories
         }
 
         #endregion
+        
+        private readonly IFtpClient _client;
     }
 }

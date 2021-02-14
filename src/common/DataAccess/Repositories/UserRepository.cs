@@ -5,8 +5,6 @@ namespace DataAccess.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        private readonly ISqlExecutor _executor;
-
         public UserRepository(ISqlExecutor executor)
         {
             _executor = executor;
@@ -50,5 +48,7 @@ namespace DataAccess.Repositories
         }
 
         #endregion
+        
+        private readonly ISqlExecutor _executor;
     }
 }

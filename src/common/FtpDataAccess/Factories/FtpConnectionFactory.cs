@@ -9,8 +9,6 @@ namespace FtpDataAccess.Factories
 {
     public class FtpConnectionFactory : IFtpConnectionFactory
     {
-        private readonly FtpConnectionOptions _options;
-
         public FtpConnectionFactory(FtpConnectionOptions options)
         {
             _options = options;
@@ -38,5 +36,7 @@ namespace FtpDataAccess.Factories
         }
 
         #endregion
+        
+        private readonly FtpConnectionOptions _options;
     }
 }

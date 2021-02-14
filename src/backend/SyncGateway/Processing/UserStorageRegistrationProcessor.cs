@@ -13,10 +13,6 @@ namespace SyncGateway.Processing
 {
     public class UserStorageRegistrationProcessor : BasicProcessor
     {
-        private readonly IRepeater<UserFolderNotCreatedException> _repeater;
-
-        private readonly IStorageRepository _storageRepository;
-
         public UserStorageRegistrationProcessor(IStorageRepository storageRepository,
             IRepeater<UserFolderNotCreatedException> repeater)
         {
@@ -24,7 +20,7 @@ namespace SyncGateway.Processing
             _repeater = repeater;
         }
 
-        #region Implementation of IProcessor
+        #region Implementation of BasicProcessor
 
         public override void Process(object contract)
         {
@@ -52,5 +48,8 @@ namespace SyncGateway.Processing
         }
 
         #endregion
+        
+        private readonly IRepeater<UserFolderNotCreatedException> _repeater;
+        private readonly IStorageRepository _storageRepository;
     }
 }

@@ -4,8 +4,6 @@ namespace DataAccess.Helpers
 {
     public class SqlTransactionScope : ISqlTransactionScope
     {
-        private readonly TransactionScope _transactionScope;
-
         public SqlTransactionScope()
         {
             _transactionScope = new TransactionScope(TransactionScopeOption.Required,
@@ -29,5 +27,7 @@ namespace DataAccess.Helpers
         }
 
         #endregion
+        
+        private readonly TransactionScope _transactionScope;
     }
 }

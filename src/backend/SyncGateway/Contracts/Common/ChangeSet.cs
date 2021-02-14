@@ -1,7 +1,13 @@
-﻿namespace SyncGateway.Contracts.Common
+﻿using System;
+using System.Collections.Generic;
+
+namespace SyncGateway.Contracts.Common
 {
-    public class ChangeSet
+    [Serializable]
+    public record ChangeSet
     {
-        
+        public string Identity { get; init; }
+
+        public ICollection<Change> Records { get; set; }
     }
 }
