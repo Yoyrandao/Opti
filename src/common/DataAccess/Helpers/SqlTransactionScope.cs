@@ -24,6 +24,7 @@ namespace DataAccess.Helpers
         public void Commit()
         {
             _transactionScope.Complete();
+            _transactionScope.Dispose();
         }
 
         #endregion

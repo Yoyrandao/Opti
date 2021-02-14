@@ -8,11 +8,19 @@ namespace DataAccess.Repositories
     {
         bool IsFilePartExists(string folder, string partName);
 
+        void Add(FilePart part);
+
         int AddAndReturnId(FilePart part);
+
+        void AppendToFile(FilePart part);
+
+        void UpdateFilePart(string partName, string newHash);
 
         FilePart GetById(int id);
 
         FilePart GetByParentId(int parentId);
+
+        FilePart GetByPartName(string partName);
 
         IEnumerable<FilePart> GetAll();
 

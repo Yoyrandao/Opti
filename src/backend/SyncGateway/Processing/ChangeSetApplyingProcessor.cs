@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
+using DataAccess.Domain;
+using DataAccess.Helpers;
 using DataAccess.Repositories;
 
 using EnsureThat;
@@ -14,12 +17,15 @@ namespace SyncGateway.Processing
 {
     public class ChangeSetApplyingProcessor : BasicProcessor
     {
-        public ChangeSetApplyingProcessor(IFilePartRepository filePartRepository, IFolderRepository folderRepository,
-                                          IRepeater<FileNotFoundException> repeater)
+        public ChangeSetApplyingProcessor(IFilePartRepository              filePartRepository,
+                                          IFolderRepository                folderRepository,
+                                          IRepeater<Exception> repeater,
+                                          ITransactionFactory              transactionFactory)
         {
-            _filePartRepository = filePartRepository;
-            _folderRepository = folderRepository;
             _repeater = repeater;
+            _folderRepository = folderRepository;
+            _filePartRepository = filePartRepository;
+            _transactionFactory = transactionFactory;
         }
 
         #region Implementation of BasicProcessor
@@ -31,15 +37,46 @@ namespace SyncGateway.Processing
 
             foreach (var record in data.Records)
             {
-                File.WriteAllText(record.PartName, record.Base64Content);
-
                 _repeater.Process(() =>
                 {
-                    // _folderRepository.UploadFile(".", record.PartName, data.Identity);
+                    var transaction = _transactionFactory.BeginTransaction();
+                    using var memoryStream = new MemoryStream(Convert.FromBase64String(record.Base64Content));
 
-                    /*
-                     * TODO: File uploading logic
-                     */
+                    var existingRecord = _filePartRepository.GetByPartName(record.PartName);
+
+                    if (existingRecord == null)
+                    {
+                        if (record.IsFirst)
+                        {
+                            _filePartRepository.Add(new FilePart
+                            {
+                                Hash = record.Hash,
+                                Folder = data.Identity,
+                                PartName = record.PartName,
+                                Compressed = record.Compressed,
+                                BaseFileName = record.PartName,
+                            });
+                        }
+                        else
+                        {
+                            _filePartRepository.AppendToFile(new FilePart
+                            {
+                                Hash = record.Hash,
+                                Folder = data.Identity,
+                                PartName = record.PartName,
+                                BaseFileName = record.BaseFileName,
+                                Compressed = record.Compressed
+                            });
+                        }
+                    }
+                    else
+                    {
+                        _folderRepository.RemoveFile(record.PartName, data.Identity);
+                        _filePartRepository.UpdateFilePart(record.PartName, record.Hash);
+                    }
+
+                    _folderRepository.UploadFile(memoryStream, record.PartName, data.Identity);
+                    transaction.Commit();
                 });
             }
         }
@@ -49,6 +86,7 @@ namespace SyncGateway.Processing
         private readonly IFilePartRepository _filePartRepository;
         private readonly IFolderRepository _folderRepository;
 
-        private readonly IRepeater<FileNotFoundException> _repeater;
+        private readonly IRepeater<Exception> _repeater;
+        private readonly ITransactionFactory _transactionFactory;
     }
 }

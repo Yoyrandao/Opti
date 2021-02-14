@@ -9,6 +9,8 @@ namespace DataAccess.Domain
 
         public string PartName { get; init; }
 
+        public string BaseFileName { get; init; }
+
         public string Hash { get; init; }
 
         public int? ParentId { get; init; }

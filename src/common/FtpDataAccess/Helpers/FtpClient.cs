@@ -8,12 +8,14 @@ using File = FtpDataAccess.Models.File;
 
 namespace FtpDataAccess.Helpers
 {
-    public class CustomFtpClient : ICustomFtpClient
+    public class FtpClient : IFtpClient
     {
-        public CustomFtpClient(IFtpWebRequestFactory requestFactory)
+        public FtpClient(IFtpWebRequestFactory requestFactory)
         {
             _requestFactory = requestFactory;
         }
+
+        #region Implementation of IFtpClient
 
         public void UploadFile(Stream fileStream, string remotePath)
         {
@@ -25,7 +27,7 @@ namespace FtpDataAccess.Helpers
 
         public void DeleteFile(string remotePath)
         {
-            var request = _requestFactory.CreateFor(remotePath).With(WebRequestMethods.Ftp.ListDirectory).Build();
+            var request = _requestFactory.CreateFor(remotePath).With(WebRequestMethods.Ftp.DeleteFile).Build();
             request.GetResponse();
         }
 
@@ -90,6 +92,8 @@ namespace FtpDataAccess.Helpers
 
             return isExists;
         }
+
+        #endregion
 
         private readonly IFtpWebRequestFactory _requestFactory;
     }

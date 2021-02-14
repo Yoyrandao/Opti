@@ -21,6 +21,7 @@ CREATE TABLE public.fileParts (
   partName              VARCHAR(255) NOT NULL,
   hash                  VARCHAR(255) NOT NULL,
   parentId              INTEGER,
+  baseFileName          VARCHAR(255) NOT NULL,
   compressed            BOOLEAN      DEFAULT false,
   creationTimestamp     TIMESTAMP    NOT NULL,
   modificationTimestamp TIMESTAMP    NOT NULL,
@@ -44,12 +45,14 @@ BEGIN
 END
 $$;
 
+
 CREATE FUNCTION addFilePart(
-	_filePart   VARCHAR(255),
-  _folder     VARCHAR(255),
-  _hash       VARCHAR(255),
-	_parentId   INTEGER,
-	_compressed BOOLEAN
+	_filePart     VARCHAR(255),
+  _baseFileName VARCHAR(255),
+  _folder       VARCHAR(255),
+  _hash         VARCHAR(255),
+	_parentId     INTEGER,
+	_compressed   BOOLEAN
 ) RETURNS INTEGER LANGUAGE plpgsql AS $$
 DECLARE
   _id INTEGER;
@@ -59,10 +62,11 @@ BEGIN
 		partname,
     hash,
 		parentid,
+    baseFileName,
 		compressed,
 		creationtimestamp,
 		modificationtimestamp
-	) VALUES (_folder, _filePart, _hash, _parentId, _compressed, now(), now())
+	) VALUES (_folder, _filePart, _hash, _parentId, _baseFileName, _compressed, now(), now())
   RETURNING id INTO _id;
 
   RETURN _id;
@@ -70,10 +74,49 @@ END
 $$;
 
 
+CREATE PROCEDURE appendFilePart(
+	_filePart     VARCHAR(255),
+	_baseFileName VARCHAR(255),
+	_folder       VARCHAR(255),
+	_hash         VARCHAR(255),
+	_compressed   BOOLEAN
+) LANGUAGE plpgsql AS $$
+DECLARE
+	_nextParentId INTEGER;
+BEGIN
+	SELECT MAX(fp.id) INTO _nextParentId FROM public.fileparts fp WHERE fp.basefilename = _baseFileName;
+	
+	INSERT INTO public.fileparts (
+    folder,
+		partname,
+    hash,
+		parentid,
+    baseFileName,
+		compressed,
+		creationtimestamp,
+		modificationtimestamp
+	) VALUES (_folder, _filePart, _hash, _nextParentId, _baseFileName, _compressed, now(), now());
+END
+$$;
+
+
+CREATE PROCEDURE updateFilePart(
+	_filePart VARCHAR(255),
+	_hash VARCHAR(255)
+) LANGUAGE plpgsql AS $$
+BEGIN
+	UPDATE public.fileparts
+	SET hash = _hash,
+		modificationtimestamp = now()
+	WHERE partname = _filePart;
+END
+$$;
+
+
 --DATA
 
 insert into public.user(accountuid, login, folder, creationtimestamp, modificationtimestamp)
-values (uuid_generate_v4(), 'Aaron', 'aaron', now(), now());
+values (uuid_generate_v4(), 'aaron', 'aaron', now(), now());
 
 
 --PERMISSIONS

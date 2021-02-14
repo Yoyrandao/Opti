@@ -4,7 +4,7 @@ namespace FtpDataAccess.Repositories
 {
     public class StorageRepository : IStorageRepository
     {
-        public StorageRepository(ICustomFtpClient ftpClient)
+        public StorageRepository(IFtpClient ftpClient)
         {
             _ftpClient = ftpClient;
         }
@@ -23,6 +23,6 @@ namespace FtpDataAccess.Repositories
 
         #endregion
 
-        private readonly ICustomFtpClient _ftpClient;
+        private readonly IFtpClient _ftpClient;
     }
 }

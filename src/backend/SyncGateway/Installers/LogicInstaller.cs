@@ -1,4 +1,7 @@
-﻿using DataAccess.Repositories;
+﻿using System;
+
+using DataAccess.Helpers;
+using DataAccess.Repositories;
 
 using FtpDataAccess.Repositories;
 
@@ -25,6 +28,14 @@ namespace SyncGateway.Installers
                         x.GetService<IRepeater<UserNotInDatabaseException>>()),
                     new UserStorageRegistrationProcessor(x.GetService<IStorageRepository>(),
                         x.GetService<IRepeater<UserFolderNotCreatedException>>())
+                })));
+
+            services.AddTransient<IUpdateUserStorageService, UpdateUserStorageService>(x =>
+                new UpdateUserStorageService(new OperationTask(new BasicProcessor[]
+                {
+                    new ChangeSetApplyingProcessor(x.GetService<IFilePartRepository>(),
+                        x.GetService<IFolderRepository>(), x.GetService<IRepeater<Exception>>(),
+                        x.GetService<ITransactionFactory>())
                 })));
 
             return services;

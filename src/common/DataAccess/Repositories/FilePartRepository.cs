@@ -7,10 +7,7 @@ namespace DataAccess.Repositories
 {
     public class FilePartRepository : IFilePartRepository
     {
-        public FilePartRepository(ISqlExecutor executor)
-        {
-            _executor = executor;
-        }
+        public FilePartRepository(ISqlExecutor executor) => _executor = executor;
 
         #region Implementation of IFilePartRepository
 
@@ -28,10 +25,61 @@ namespace DataAccess.Repositories
 
         public int AddAndReturnId(FilePart part)
         {
-            const string query = @"SELECT * FROM public.addFilePart(@FileName, @Folder, @ParentId, @Compressed)";
+            const string query =
+                @"SELECT * FROM public.addFilePart(@FileName, @Base, @Folder, @Hash, @ParentId, @Compressed)";
 
             return _executor.Get<int>(query,
-                new { FileName = part.PartName, part.Folder, part.ParentId, part.Compressed });
+                new
+                {
+                    FileName = part.PartName,
+                    Base = part.BaseFileName,
+                    part.Folder,
+                    part.Hash,
+                    part.ParentId,
+                    part.Compressed
+                });
+        }
+
+        public void Add(FilePart part)
+        {
+            const string query =
+                @"SELECT * FROM public.addFilePart(@FileName, @Base, @Folder, @Hash, @ParentId, @Compressed)";
+
+            _executor.Get<int>(query,
+                new
+                {
+                    FileName = part.PartName,
+                    Base = part.BaseFileName,
+                    part.Folder,
+                    part.Hash,
+                    part.ParentId,
+                    part.Compressed
+                });
+        }
+
+        public void AppendToFile(FilePart part)
+        {
+            const string query = @"CALL public.appendfilepart(@FileName, @Base, @Folder, @Hash, @Compressed)";
+            
+            _executor.Execute(query, new
+            {
+                FileName = part.PartName,
+                Base = part.BaseFileName,
+                part.Folder,
+                part.Hash,
+                part.Compressed
+            });
+        }
+
+        public void UpdateFilePart(string partName, string newHash)
+        {
+            const string query = @"CALL public.updateFilePart(@FileName, @Hash)";
+            
+            _executor.Execute(query, new
+            {
+                FileName = partName,
+                Hash = newHash
+            });
         }
 
         public FilePart GetById(int id)
@@ -40,6 +88,7 @@ namespace DataAccess.Repositories
                                           fp.folder,
                                           fp.partName,
                                           fp.parentId,
+                                          fp.baseFileName,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -55,6 +104,7 @@ namespace DataAccess.Repositories
                                           fp.folder,
                                           fp.partName,
                                           fp.parentId,
+                                          fp.baseFileName,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -64,12 +114,29 @@ namespace DataAccess.Repositories
             return _executor.Get<FilePart>(query, new { Parent = parentId });
         }
 
+        public FilePart GetByPartName(string partName)
+        {
+            const string query = @"SELECT fp.id,
+                                          fp.folder,
+                                          fp.partName,
+                                          fp.parentId,
+                                          fp.baseFileName,
+                                          fp.compressed,
+                                          fp.creationTimestamp,
+                                          fp.modificationTimestamp
+                                   FROM public.fileParts fp
+                                   WHERE fp.partName = @Name";
+
+            return _executor.Get<FilePart>(query, new { Name = partName });
+        }
+
         public IEnumerable<FilePart> GetAll()
         {
             const string query = @"SELECT fp.id,
                                           fp.folder,
                                           fp.partName,
                                           fp.parentId,
+                                          fp.baseFileName,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -84,6 +151,7 @@ namespace DataAccess.Repositories
                                           fp.folder,
                                           fp.partName,
                                           fp.parentId,
+                                          fp.baseFileName,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -94,7 +162,7 @@ namespace DataAccess.Repositories
         }
 
         #endregion
-        
+
         private readonly ISqlExecutor _executor;
     }
 }

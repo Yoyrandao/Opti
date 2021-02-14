@@ -25,6 +25,10 @@ namespace SyncGateway.Installers
             services.AddSingleton(
                 RepeaterFactory.Create<UserFolderNotCreatedException>(
                     PolicyFactory.Create<UserFolderNotCreatedException>(retryIntervals)));
+            
+            services.AddSingleton(
+                RepeaterFactory.Create<Exception>(
+                    PolicyFactory.Create<Exception>(retryIntervals)));
 
             return services;
         }

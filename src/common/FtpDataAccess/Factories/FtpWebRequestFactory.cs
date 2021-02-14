@@ -15,6 +15,8 @@ namespace FtpDataAccess.Factories
             _baseUri = uriBuilder.Build(_options);
         }
 
+        #region Implementation of IFtpWebRequestFactory
+
         public IFtpWebRequestFactory CreateFor(string resourcePath)
         {
             var request = (FtpWebRequest) WebRequest.Create(_baseUri + resourcePath);
@@ -37,6 +39,8 @@ namespace FtpDataAccess.Factories
         {
             return _request;
         }
+
+        #endregion
 
         private FtpWebRequest _request;
 

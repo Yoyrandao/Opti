@@ -12,7 +12,7 @@ namespace SyncGateway.Installers
         {
             services.AddTransient<IFtpUriBuilder, FtpUriBuilder>();
             services.AddTransient<IFtpWebRequestFactory, FtpWebRequestFactory>();
-            services.AddTransient<ICustomFtpClient, CustomFtpClient>();
+            services.AddTransient<IFtpClient, FtpClient>();
 
             services.AddTransient<IFolderRepository, FolderRepository>();
             services.AddTransient<IStorageRepository, StorageRepository>();

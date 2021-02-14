@@ -9,6 +9,8 @@ namespace FtpDataAccess.Repositories
     {
         void UploadFile(Stream fileStream, string fileName, string folder);
 
+        void RemoveFile(string filename, string folder);
+
         IEnumerable<File> GetFiles(string folder);
     }
 }

@@ -5,7 +5,7 @@ using File = FtpDataAccess.Models.File;
 
 namespace FtpDataAccess.Helpers
 {
-    public interface ICustomFtpClient
+    public interface IFtpClient
     {
         void UploadFile(Stream fileStream, string remotePath);
 

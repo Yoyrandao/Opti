@@ -9,7 +9,7 @@ namespace FtpDataAccess.Repositories
 {
     public class FolderRepository : IFolderRepository
     {
-        public FolderRepository(ICustomFtpClient ftpClient)
+        public FolderRepository(IFtpClient ftpClient)
         {
             _ftpClient = ftpClient;
         }
@@ -21,6 +21,11 @@ namespace FtpDataAccess.Repositories
             _ftpClient.UploadFile(stream, Path.Join(folder, fileName));
         }
 
+        public void RemoveFile(string filename, string folder)
+        {
+            _ftpClient.DeleteFile(Path.Join(folder, filename));
+        }
+
         public IEnumerable<File> GetFiles(string folder)
         {
             return _ftpClient.GetListing(folder);
@@ -28,6 +33,6 @@ namespace FtpDataAccess.Repositories
 
         #endregion
 
-        private readonly ICustomFtpClient _ftpClient;
+        private readonly IFtpClient _ftpClient;
     }
 }
