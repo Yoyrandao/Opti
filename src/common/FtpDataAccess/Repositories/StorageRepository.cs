@@ -1,48 +1,28 @@
-﻿using System;
-
-using FluentFTP;
-
-using FtpDataAccess.Factories;
+﻿using FtpDataAccess.Helpers;
 
 namespace FtpDataAccess.Repositories
 {
-    public class StorageRepository : IStorageRepository, IDisposable
+    public class StorageRepository : IStorageRepository
     {
-        public StorageRepository(IFtpConnectionFactory connectionFactory)
+        public StorageRepository(ICustomFtpClient ftpClient)
         {
-            _client = connectionFactory.Create();
+            _ftpClient = ftpClient;
         }
-
-        #region Implementation of IDisposable
-
-        public void Dispose()
-        {
-            _client.Disconnect();
-            _client?.Dispose();
-        }
-
-        #endregion
 
         #region Implementation of IStorageRepository
 
         public void CreateFolder(string name)
-        {
-            _client.Connect();
-            _client.CreateDirectory(name, true);
-            _client.Disconnect();
+        { 
+            _ftpClient.CreateDirectory(name);
         }
 
         public bool IsFolderExists(string name)
         {
-            _client.Connect();
-            var result = _client.DirectoryExists(name);
-            _client.Disconnect();
-
-            return result;
+            return _ftpClient.IsDirectoryExists(name);
         }
 
         #endregion
-        
-        private readonly IFtpClient _client;
+
+        private readonly ICustomFtpClient _ftpClient;
     }
 }

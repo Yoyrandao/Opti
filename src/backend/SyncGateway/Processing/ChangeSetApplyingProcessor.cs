@@ -35,8 +35,8 @@ namespace SyncGateway.Processing
 
                 _repeater.Process(() =>
                 {
-                    _folderRepository.UploadFile(".", record.PartName, data.Identity);
-                    
+                    // _folderRepository.UploadFile(".", record.PartName, data.Identity);
+
                     /*
                      * TODO: File uploading logic
                      */

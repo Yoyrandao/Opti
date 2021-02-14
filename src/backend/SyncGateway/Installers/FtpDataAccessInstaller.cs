@@ -1,4 +1,5 @@
 ﻿using FtpDataAccess.Factories;
+using FtpDataAccess.Helpers;
 using FtpDataAccess.Repositories;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -9,7 +10,9 @@ namespace SyncGateway.Installers
     {
         public static IServiceCollection InstallFtpDataAccess(this IServiceCollection services)
         {
-            services.AddTransient<IFtpConnectionFactory, FtpConnectionFactory>();
+            services.AddTransient<IFtpUriBuilder, FtpUriBuilder>();
+            services.AddTransient<IFtpWebRequestFactory, FtpWebRequestFactory>();
+            services.AddTransient<ICustomFtpClient, CustomFtpClient>();
 
             services.AddTransient<IFolderRepository, FolderRepository>();
             services.AddTransient<IStorageRepository, StorageRepository>();
