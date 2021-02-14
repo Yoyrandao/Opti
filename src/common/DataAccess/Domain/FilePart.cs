@@ -5,7 +5,7 @@ namespace DataAccess.Domain
     [Serializable]
     public record FilePart : BaseEntity
     {
-        public string Folder { get; init; }
+        public string Folder { get; set; }
 
         public string PartName { get; init; }
 

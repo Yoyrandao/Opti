@@ -1,5 +1,7 @@
 ﻿using System;
 
+using AutoMapper;
+
 using DataAccess.Helpers;
 using DataAccess.Repositories;
 
@@ -35,7 +37,7 @@ namespace SyncGateway.Installers
                 {
                     new ChangeSetApplyingProcessor(x.GetService<IFilePartRepository>(),
                         x.GetService<IFolderRepository>(), x.GetService<IRepeater<Exception>>(),
-                        x.GetService<ITransactionFactory>())
+                        x.GetService<ITransactionFactory>(), x.GetService<IMapper>())
                 })));
 
             return services;

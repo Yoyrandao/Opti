@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 
+using AutoMapper;
+
 using DataAccess.Domain;
 using DataAccess.Helpers;
 using DataAccess.Repositories;
@@ -17,11 +19,13 @@ namespace SyncGateway.Processing
 {
     public class ChangeSetApplyingProcessor : BasicProcessor
     {
-        public ChangeSetApplyingProcessor(IFilePartRepository              filePartRepository,
-                                          IFolderRepository                folderRepository,
+        public ChangeSetApplyingProcessor(IFilePartRepository  filePartRepository,
+                                          IFolderRepository    folderRepository,
                                           IRepeater<Exception> repeater,
-                                          ITransactionFactory              transactionFactory)
+                                          ITransactionFactory  transactionFactory,
+                                          IMapper              mapper)
         {
+            _mapper = mapper;
             _repeater = repeater;
             _folderRepository = folderRepository;
             _filePartRepository = filePartRepository;
@@ -48,25 +52,13 @@ namespace SyncGateway.Processing
                     {
                         if (record.IsFirst)
                         {
-                            _filePartRepository.Add(new FilePart
-                            {
-                                Hash = record.Hash,
-                                Folder = data.Identity,
-                                PartName = record.PartName,
-                                Compressed = record.Compressed,
-                                BaseFileName = record.PartName,
-                            });
+                            _filePartRepository.Add(_mapper.Map<FilePart>(record,
+                                opt => opt.AfterMap((src, dest) => dest.Folder = data.Identity)));
                         }
                         else
                         {
-                            _filePartRepository.AppendToFile(new FilePart
-                            {
-                                Hash = record.Hash,
-                                Folder = data.Identity,
-                                PartName = record.PartName,
-                                BaseFileName = record.BaseFileName,
-                                Compressed = record.Compressed
-                            });
+                            _filePartRepository.AppendToFile(_mapper.Map<FilePart>(record,
+                                opt => opt.AfterMap((src, dest) => dest.Folder = data.Identity)));
                         }
                     }
                     else
@@ -88,5 +80,6 @@ namespace SyncGateway.Processing
 
         private readonly IRepeater<Exception> _repeater;
         private readonly ITransactionFactory _transactionFactory;
+        private readonly IMapper _mapper;
     }
 }
