@@ -13,7 +13,7 @@ src/tools/dataset_creator/sources/images/*.jpg
 *.csv
 tree.png
 
-/dist
+dist/
 
 *.list
 
