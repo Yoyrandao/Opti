@@ -1,0 +1,14 @@
+appId: com.yoyrandao.opti
+productName: Opti
+directories:
+  app: "./dist/"
+  output: "./out/"
+mac:
+  target: dmg
+win:
+  target: nsis
+  asar: true
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+buildVersion: '1'

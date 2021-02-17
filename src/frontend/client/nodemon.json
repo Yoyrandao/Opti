@@ -1,0 +1,8 @@
+{
+  "watch": [ 
+    "src/main.ts", 
+    "src/electron/*"
+  ],
+  "exec": "webpack --config ./configuration/webpack.electron.js && electron ./dist/index.js",
+  "ext": "ts"
+}
