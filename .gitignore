@@ -13,6 +13,8 @@ src/tools/dataset_creator/sources/images/*.jpg
 *.csv
 tree.png
 
+/dist
+
 *.list
 
 appsettings.*.json
