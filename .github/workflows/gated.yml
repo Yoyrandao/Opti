@@ -34,7 +34,7 @@ jobs:
         context: ./src/backend/SyncGateway/
         file: ./src/backend/SyncGateway/Dockerfile
         push: true
-        tags: yoyrandao/opti-syncgateway:latest,yoyrandao/opti-syncgateway:${{ GITHUB_SHA }}
+        tags: yoyrandao/opti-syncgateway:latest,yoyrandao/opti-syncgateway:$GITHUB_SHA
       
       
       
