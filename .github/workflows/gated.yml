@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+
+    - run: echo ::set-env name=IMAGE_TAG::${GITHUB_SHA:10}
     
     - name: setup dotnet
       uses: actions/setup-dotnet@v1
@@ -34,9 +36,9 @@ jobs:
         context: ./src/backend/SyncGateway/
         file: ./src/backend/SyncGateway/Dockerfile
         push: true
-        tags: yoyrandao/opti-syncgateway:latest,yoyrandao/opti-syncgateway:$GITHUB_SHA
+        tags: yoyrandao/opti-syncgateway:latest,yoyrandao/opti-syncgateway:${{ env.IMAGE_TAG }}
       
-      
+    
       
       
       
