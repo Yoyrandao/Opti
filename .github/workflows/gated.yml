@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${GITHUB_SHA:10}
     steps:
     - uses: actions/checkout@v2
     
@@ -34,7 +36,7 @@ jobs:
         context: ./src/backend/SyncGateway/
         file: ./src/backend/SyncGateway/Dockerfile
         push: true
-        tags: yoyrandao/opti-syncgateway:latest,yoyrandao/opti-syncgateway:${GITHUB_SHA:10}
+        tags: yoyrandao/opti-syncgateway:latest,yoyrandao/opti-syncgateway:${{ env.IMAGE_TAG }}
       
     
       
