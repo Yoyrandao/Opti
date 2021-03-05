@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+ ftp_server:
+  image: stilliard/pure-ftpd
+  container_name: ftp_server
+  ports:
+   - '5433:21'
+   - '30000-30009:30000-30009'
+  volumes:
+   - storage:/home/api_service
+   - user_data:/etc/pure-ftpd/passwd
+  env_file:
+   - env.production.list
+  restart: always
+volumes:
+ storage:
+ user_data:

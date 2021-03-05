@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
 using SyncGateway.Installers;
+using SyncGateway.Services;
 
 namespace SyncGateway
 {
@@ -28,6 +29,9 @@ namespace SyncGateway
                .InstallUtils()
                .InstallShields();
 
+            services.AddHealthChecks()
+               .AddCheck<HealthCheckService>("Liveness");
+
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>
@@ -46,7 +50,13 @@ namespace SyncGateway
             }
 
             app.UseRouting();
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/health/startup");
+                endpoints.MapHealthChecks("/healthz");
+                endpoints.MapHealthChecks("/ready");
+                endpoints.MapControllers();
+            });
 
             app.UseCors(builder =>
             {

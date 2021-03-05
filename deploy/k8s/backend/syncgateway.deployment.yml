@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syncgateway-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      component: opti-syncgateway
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+  template:
+    metadata:
+      labels:
+        component: opti-syncgateway
+    spec:
+      containers: 
+        - name: syncgateway
+          image: yoyrandao/opti-syncgateway
+          imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+          ports:
+            - containerPort: 5000
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Kubernetes"
+          volumeMounts:
+            - name: config-secret
+              mountPath: /app/secrets
+              readOnly: true
+      imagePullSecrets:
+        - name: registry-key
+      volumes:
+        - name: config-secret
+          secret:
+            secretName: secret-appsettings

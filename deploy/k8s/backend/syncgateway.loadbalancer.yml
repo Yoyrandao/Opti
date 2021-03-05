@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: opti-cc-balancer
+  name: syncgateway-balancer
 spec:
   type: LoadBalancer
   selector:
-    app: opti-cc
+    component: opti-syncgateway
   ports:
     - protocol: TCP
-      port: 5555
+      port: 5000
+      targetPort: 5000

@@ -5,18 +5,18 @@ metadata:
   labels:
     app: opti-cc
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: opti-cc
+      component: opti-cc
   template:
     metadata:
       labels:
-        app: opti-cc
+        component: opti-cc
     spec:
       containers:
         - name: compressionchecker
-          image: yoyrandao/cc:latest
+          image: yoyrandao/opti-cc
           imagePullPolicy: Always
           ports:
             - containerPort: 5555
