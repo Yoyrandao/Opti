@@ -36,7 +36,8 @@ jobs:
         context: ./src/backend/SyncGateway/
         file: ./src/backend/SyncGateway/Dockerfile
         push: true
-        tags: yoyrandao/opti-syncgateway:latest,yoyrandao/opti-syncgateway:${IMAGE_TAG}
+        tags: yoyrandao/opti-syncgateway:latest
+        tagging: true
       
     
       
