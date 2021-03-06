@@ -1,14 +1,45 @@
-name: TS
+name: Gated
 
-on:
-  workflow_run:
-    workflows: ["Gated"]
-    branches: [main]
-    types:
-      - completed
+on: workflow_dispatch
+
 
 jobs:
   build:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: setup dotnet
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+      
+    - name: build&push syncgateway image
+      id: syncgateway_build_push
+      uses: mr-smithers-excellent/docker-build-push@v5
+      with:
+        image: yoyrandao/opti-syncgateway
+        tags: latest, $IMAGE_TAG
+        registry: docker.io
+        directory: ./src/
+        dockerfile: ./src/backend/SyncGateway/Dockerfile
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+    
+    - name: build&push compressionchecker image
+      id: compressionchecker_build_push
+      uses: mr-smithers-excellent/docker-build-push@v5
+      with:
+        image: yoyrandao/opti-cc
+        tags: latest, $IMAGE_TAG
+        registry: docker.io
+        directory: ./src/backend/CompressionChecker/
+        dockerfile: ./src/backend/CompressionChecker/Dockerfile
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+  deploy:
     runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ${{ github.sha }}
@@ -25,8 +56,12 @@ jobs:
 
       - name: update cc deployment
         run: TAG=$(echo $GITHUB_SHA) && sed -i 's|yoyrandao/opti-cc|yoyrandao/opti-cc:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/backend/cc.deployment.yml
-
+ 
+      - name: cat cc
+        run: cat $GITHUB_WORKSPACE/deploy/k8s/backend/cc.deployment.yml 
       
+      - name: cat syncgateway
+        run: cat $GITHUB_WORKSPACE/deploy/k8s/backend/syncgateway.deployment.yml
       
       
       
