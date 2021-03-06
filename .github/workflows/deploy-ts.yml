@@ -1,0 +1,52 @@
+name: Gated
+
+on:
+  workflow_run:
+    workflows: ["Gated"]
+    branches: [main]
+    types:
+      - completed
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install doctl
+        uses: digitalocean/action-doctl@v2.1.0
+        with:
+          token: ${{ secrets.DO_K8S_ACCESS_TOKEN }}
+    
+      - name: update syncgateway deployment
+        run: TAG=$(echo $GITHUB_SHA) && sed -i 's|yoyrandao/opti-syncgateway|yoyrandao/opti-syncgateway:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/backend/syncgateway.deployment.yml
+
+      - name: update cc deployment
+        run: TAG=$(echo $GITHUB_SHA) && sed -i 's|yoyrandao/opti-cc|yoyrandao/opti-cc:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/backend/cc.deployment.yml
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
