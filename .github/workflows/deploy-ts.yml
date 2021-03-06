@@ -3,7 +3,7 @@ name: TS
 on: workflow_dispatch
 
 jobs:
-  deploy:
+  deploy_syncgateway:
     runs-on: ubuntu-latest
     env:
       IMAGE_TAG: ${{ github.sha }}
@@ -17,17 +17,39 @@ jobs:
     
       - name: update syncgateway deployment
         run: TAG=$(echo $GITHUB_SHA) && sed -i 's|yoyrandao/opti-syncgateway|yoyrandao/opti-syncgateway:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/backend/syncgateway.deployment.yml
+ 
+      - name: enable kubeconfig
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DO_K8S_CLUSTER_NAME }}
+
+      - name: deploy syncgateway
+        run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/backend/syncgateway.deployment.yml
+
+      - name: creating loadbalancer
+        run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/backend/syncgateway.loadbalancer.yml
+
+  deploy_cc:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install doctl
+        uses: digitalocean/action-doctl@v2.1.0
+        with:
+          token: ${{ secrets.DO_K8S_ACCESS_TOKEN }}
 
       - name: update cc deployment
         run: TAG=$(echo $GITHUB_SHA) && sed -i 's|yoyrandao/opti-cc|yoyrandao/opti-cc:'${TAG}'|' $GITHUB_WORKSPACE/deploy/k8s/backend/cc.deployment.yml
  
-      - name: cat cc
-        run: cat $GITHUB_WORKSPACE/deploy/k8s/backend/cc.deployment.yml 
-      
-      - name: cat syncgateway
-        run: cat $GITHUB_WORKSPACE/deploy/k8s/backend/syncgateway.deployment.yml
-      
-      
+      - name: enable kubeconfig
+        run: doctl kubernetes cluster kubeconfig save --expiry-seconds 600 ${{ secrets.DO_K8S_CLUSTER_NAME }}
+
+      - name: deploy syncgateway
+        run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/backend/cc.deployment.yml
+
+      - name: creating loadbalancer
+        run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/backend/cc.loadbalancer.yml
       
       
       
