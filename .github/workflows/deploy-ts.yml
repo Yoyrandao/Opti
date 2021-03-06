@@ -1,4 +1,4 @@
-name: Gated
+name: TS
 
 on:
   workflow_run:
