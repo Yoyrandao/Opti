@@ -55,6 +55,9 @@ jobs:
     needs:
       - deploy_cc
       - deploy_syncgateway
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_TAG: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v2
 
