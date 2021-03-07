@@ -21,6 +21,9 @@ def get_config(environment: str) -> settings:
 	settings_model = settings()
 	settings_model.port = int(parser['webconfig']['port'])
 	settings_model.host = parser['webconfig']['host']
+	settings_model.name = parser['webconfig']['name']
+	settings_model.version = parser['webconfig']['version']
+
 
 	return settings_model
 

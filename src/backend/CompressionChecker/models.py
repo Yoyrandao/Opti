@@ -22,3 +22,5 @@ class settings:
 	def __init__(self):
 		self.port = 0
 		self.host = ''
+		self.name = ''
+		self.version = ''

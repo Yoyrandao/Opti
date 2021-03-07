@@ -39,4 +39,4 @@ spec:
       volumes:
         - name: config-secret
           secret:
-            secretName: secret-appsettings
+            secretName: syncgateway-appsettings

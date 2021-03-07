@@ -1,10 +1,11 @@
 import json
 import joblib
+import seqlog
+import logging
 import argparse
 import configparser
 
 import numpy as np
-import logging as log
 
 from flask import Flask, Response, request
 from sklearn.preprocessing import LabelEncoder
@@ -15,7 +16,11 @@ from helpers import fill_file_data_contract, checked_response_encoder, get_confi
 
 """ Additional configuration """
 
-log.root.setLevel(log.DEBUG)
+seqlog.configure_from_file('secrets/logger_config.yml')
+seqlog.set_global_log_properties(
+	Application="CompressionChecker",
+	AssemblyVersion="0.0.0.1"
+)
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('environment', metavar='env', type=str, help='and environment identifier')
@@ -23,6 +28,7 @@ args = arg_parser.parse_args()
 
 config = get_config(args.environment)
 
+log = logging.getLogger()
 
 """ Main section """
 
@@ -31,6 +37,8 @@ _app = Flask(__name__)
 @_app.route('/check', methods=['POST'])
 def confirm_check_request():
 	""" Primary controller """
+
+	log.info("Executed checking controller.")
 
 	try:
 		request_data = request.get_json()
@@ -52,5 +60,5 @@ def confirm_check_request():
 		return Response(error, status=500, mimetype='application/json')
 
 if __name__ == '__main__':
-	log.info('Started CompressionChecker at {}'.format(config.port))
+	log.info('Started CompressionChecker at {}.'.format(config.port))
 	_app.run(debug=True if args.environment == 'local' else False, host=config.host, port=config.port)

@@ -20,5 +20,13 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 5555
+          volumeMounts:
+              - name: config-secret
+                mountPath: /app/secrets
+                readOnly: true
       imagePullSecrets:
         - name: registry-key
+      volumes:
+        - name: config-secret
+          secret:
+            secretName: cc-appsettings

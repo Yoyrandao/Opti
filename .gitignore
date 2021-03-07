@@ -16,6 +16,7 @@ tree.png
 *.list
 
 appsettings.*.json
+*_config.yml
 
 # User-specific files
 *.rsuser
