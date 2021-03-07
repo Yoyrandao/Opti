@@ -13,11 +13,6 @@ jobs:
       IMAGE_TAG: ${{ github.sha }}
     steps:
     - uses: actions/checkout@v2
-    
-    - name: setup dotnet
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
       
     - name: build&push syncgateway image
       id: syncgateway_build_push
