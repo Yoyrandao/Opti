@@ -2,6 +2,8 @@
 
 using EnsureThat;
 
+using Serilog;
+
 using SyncGateway.Contracts.In;
 using SyncGateway.Exceptions;
 
@@ -23,14 +25,16 @@ namespace SyncGateway.Processing
         public override void Process(object contract)
         {
             EnsureArg.IsNotNull(contract);
-
             var username = (contract as RegistrationContract)!.Username;
+            
+            _logger.Information($"Executing UserDatabaseRegistrationProcessor ({username}).");
+            
             _userRepository.Register(username);
 
             _repeater.Process(() =>
             {
                 if (_userRepository.GetByLogin(username) == null)
-                    throw new UserNotInDatabaseException();
+                    throw new UserNotInDatabaseException(username);
             });
 
             Successor?.Process(contract);
@@ -40,5 +44,7 @@ namespace SyncGateway.Processing
 
         private readonly IRepeater<UserNotInDatabaseException> _repeater;
         private readonly IUserRepository _userRepository;
+
+        private readonly ILogger _logger = Log.ForContext<UserDatabaseRegistrationProcessor>();
     }
 }

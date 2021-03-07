@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+ seq_ts:
+  image: datalust/seq
+  container_name: seq_ts
+  ports:
+   - '5444:80'
+   - '5341:5341'
+  volumes:
+   - seq_storage_ts:/data
+  env_file:
+   - seq-env.list
+  restart: always
+volumes:
+ seq_storage_ts:

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Serilog;
+
 using SyncGateway.Contracts.Common;
 using SyncGateway.Contracts.Out;
 using SyncGateway.Exceptions.Shields;
@@ -27,9 +29,13 @@ namespace SyncGateway.Controllers
         {
             var result = _shield.Protect(() =>
             {
+                _logger.Information($"Updating user FS triggered for {changeSet.Identity}.");
+                
                 _updateUserStorageService.Update(changeSet);
                 
-                return new ApiResponse { Data = new RegistrationResult { Success = true } };
+                _logger.Information($"Successfully updated ({changeSet.Identity}).");
+
+                return new ApiResponse { Data = new Result { Success = true } };
             });
             
             return result.Error == null ? Ok(result) : BadRequest(result);
@@ -37,5 +43,7 @@ namespace SyncGateway.Controllers
 
         private readonly IUpdateUserStorageService _updateUserStorageService;
         private readonly IExceptionShield<ApiResponse> _shield;
+
+        private readonly ILogger _logger = Log.ForContext<UpdateController>();
     }
 }

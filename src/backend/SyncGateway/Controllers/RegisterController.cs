@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Serilog;
+
 using SyncGateway.Contracts.In;
 using SyncGateway.Contracts.Out;
 using SyncGateway.Exceptions.Shields;
@@ -27,9 +29,13 @@ namespace SyncGateway.Controllers
         {
             var result = _shield.Protect(() =>
             {
+                _logger.Information($"Registration triggered for {contract.Username}.");
+                
                 _registrationService.Register(contract);
+                
+                _logger.Information($"Successfully registered ({contract.Username}).");
 
-                return new ApiResponse { Data = new RegistrationResult { Success = true } };
+                return new ApiResponse { Data = new Result { Success = true } };
             });
 
             return result.Error == null ? Ok(result) : BadRequest(result);
@@ -37,5 +43,7 @@ namespace SyncGateway.Controllers
 
         private readonly IExceptionShield<ApiResponse> _shield;
         private readonly IUserRegistrationService _registrationService;
+
+        private readonly ILogger _logger = Log.ForContext<RegisterController>();
     }
 }

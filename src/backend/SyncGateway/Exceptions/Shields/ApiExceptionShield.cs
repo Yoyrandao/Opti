@@ -7,6 +7,8 @@ using EnsureThat;
 
 using Npgsql;
 
+using Serilog;
+
 using SyncGateway.Contracts.Out;
 
 namespace SyncGateway.Exceptions.Shields
@@ -23,8 +25,10 @@ namespace SyncGateway.Exceptions.Shields
             {
                 return func();
             }
-            catch (UserFolderNotCreatedException)
+            catch (UserFolderNotCreatedException ex)
             {
+                _logger.Error($"Cannot create folder for user {ex.Username}");
+                
                 return new ApiResponse
                 {
                     Error = new ResponseError
@@ -33,8 +37,10 @@ namespace SyncGateway.Exceptions.Shields
                     }
                 };
             }
-            catch (UserNotInDatabaseException)
+            catch (UserNotInDatabaseException ex)
             {
+                _logger.Error($"Cannot create folder for user {ex.Username}");
+
                 return new ApiResponse
                 {
                     Error = new ResponseError
@@ -90,5 +96,7 @@ namespace SyncGateway.Exceptions.Shields
         }
 
         #endregion
+
+        private readonly ILogger _logger = Log.ForContext<ApiExceptionShield>();
     }
 }

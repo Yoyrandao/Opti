@@ -3,7 +3,7 @@
 namespace SyncGateway.Contracts.Out
 {
     [Serializable]
-    public record RegistrationResult
+    public record Result
     {
         public bool Success { get; init; }
     }

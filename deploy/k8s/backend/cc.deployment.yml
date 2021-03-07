@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: cc-deployment
   labels:
-    app: opti-cc
+    component: opti-cc
 spec:
   replicas: 1
   selector:

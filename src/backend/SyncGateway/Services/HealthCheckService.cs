@@ -5,6 +5,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace SyncGateway.Services
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
     public class HealthCheckService : IHealthCheck
     {
         public Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,

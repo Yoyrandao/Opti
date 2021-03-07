@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
+using Serilog;
+
 using SyncGateway.Installers;
 using SyncGateway.Services;
 
@@ -21,6 +23,10 @@ namespace SyncGateway
 
         public void ConfigureServices(IServiceCollection services)
         {
+            Log.Logger = new LoggerConfiguration()
+               .ReadFrom.Configuration(Configuration, "Serilog")
+               .CreateLogger();
+            
             services
                .InstallDataAccess()
                .InstallFtpDataAccess()
@@ -38,6 +44,8 @@ namespace SyncGateway
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SyncGateway", Version = "v1" });
             });
+            
+            Log.ForContext<Startup>().Information("SyncGateway started.");
         }
 
         public static void Configure(IApplicationBuilder app, IWebHostEnvironment env)

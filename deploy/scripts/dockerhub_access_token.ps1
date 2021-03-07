@@ -4,13 +4,12 @@ param (
   [string]$email
 )
 Write-Host "Enter docker registry password:";
-$local:securePassword = Read-Host -AsSecureString;
-$local:password = ConvertFrom-SecureString $local:securePassword;
+$local:password = Read-Host;
 
 kubectl create secret docker-registry registry-key `
   --docker-server=$server `
   --docker-username=$username `
   --docker-password=$local:password `
-  --docker-email=$DOCKER_EMAIL
+  --docker-email=$email
 
 Write-Host "Credentials created."

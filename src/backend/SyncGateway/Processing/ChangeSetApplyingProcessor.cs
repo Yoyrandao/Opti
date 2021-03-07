@@ -11,6 +11,8 @@ using EnsureThat;
 
 using FtpDataAccess.Repositories;
 
+using Serilog;
+
 using SyncGateway.Contracts.Common;
 
 using Utils.Retrying;
@@ -38,6 +40,8 @@ namespace SyncGateway.Processing
         {
             var data = contract as ChangeSet;
             EnsureArg.IsNotNull(data);
+
+            _logger.Information($"Executing ChangeSetApplyingProcessor ({data.Identity}).");
 
             foreach (var record in data.Records)
             {
@@ -81,5 +85,7 @@ namespace SyncGateway.Processing
         private readonly IRepeater<Exception> _repeater;
         private readonly ITransactionFactory _transactionFactory;
         private readonly IMapper _mapper;
+
+        private readonly ILogger _logger = Log.ForContext<ChangeSetApplyingProcessor>();
     }
 }

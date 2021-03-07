@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace SyncGateway
 {
@@ -13,6 +14,10 @@ namespace SyncGateway
 
         private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+               .ConfigureLogging(config =>
+                {
+                    config.ClearProviders();
+                })
                .ConfigureAppConfiguration((context, configurationBuilder) =>
                 {
                     configurationBuilder.Sources.Clear();
@@ -29,6 +34,9 @@ namespace SyncGateway
                     if (args != null)
                         configurationBuilder.AddCommandLine(args);
                 })
-               .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
+               .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }
