@@ -60,6 +60,9 @@ jobs:
 
       - name: install psql
         run: apt-get install -y postgresql
+    
+      - name: setup psql
+        uses: Harmon758/postgresql-action@v1.0.0
 
       - name: reinitialize_db
         run: PGPASSWORD=${{ secrets.DO_PG_PASSWORD }} psql -h ${{ secrets.DO_AGENT_IP }} -p 5432 -U ${{ secrets.DO_PG_USERNAME }} -f $GITHUB_WORKSPACE/deploy/external/postgres/scripts/init_db.sql
