@@ -58,9 +58,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: install psql
-        run: apt-get install -y postgresql
-    
       - name: setup psql
         uses: Harmon758/postgresql-action@v1.0.0
 
