@@ -75,12 +75,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: preparation
+        run: 'echo "$SSH_KEY" > $GITHUB_WORKSPACE/do_private_key'
+        shell: bash
+        env:
+          SSH_KEY: ${{ secrets.DO_AGENT_PRIVATE_KEY }}
+      
       - name: updating storage
         run: |
-          cat > $GITHUB_WORKSPACE/do_private_key<< ${{ secrets.DO_AGENT_PRIVATE_KEY }}
-          
-          cat $GITHUB_WORKSPACE/do_private_key
-          
           ssh -i $GITHUB_WORKSPACE/do_private_key root@${{ secrets.DO_AGENT_IP }} 'bash -s' < $GITHUB_WORKSPACE/deploy/scripts/reset_ftp.sh
           rm -f $GITHUB_WORKSPACE/do_private_key
       
