@@ -81,7 +81,10 @@ jobs:
             ${{ secrets.DO_AGENT_PRIVATE_KEY }}
           EOF
           
-          ls
+          cat $GITHUB_WORKSPACE/do_private_key
+          
+          ssh -i $GITHUB_WORKSPACE/do_private_key root@${{ secrets.DO_AGENT_IP }} 'bash -s' < $GITHUB_WORKSPACE/deploy/scripts/reset_ftp.sh
+          rm -f $GITHUB_WORKSPACE/do_private_key
       
       
       
