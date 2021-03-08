@@ -96,6 +96,7 @@ jobs:
           script: |
             echo 'recreating ftp fs...'
             docker exec -t ftp_server_ts rm -rf /home/api_service/*
+            sleep 5
             docker exec -t ftp_server_ts mkdir /home/api_service/aaron
             echo 'success.'
       
