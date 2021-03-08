@@ -51,21 +51,21 @@ jobs:
   #     - name: creating loadbalancer
   #       run: kubectl apply -f $GITHUB_WORKSPACE/deploy/k8s/backend/cc.loadbalancer.yml
       
-  reinit_db:
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_TAG: ${{ github.sha }}
-    steps:
-      - uses: actions/checkout@v2
+#   reinit_db:
+#     runs-on: ubuntu-latest
+#     env:
+#       IMAGE_TAG: ${{ github.sha }}
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: setup psql
-        uses: Harmon758/postgresql-action@v1.0.0
+#       - name: setup psql
+#         uses: Harmon758/postgresql-action@v1.0.0
 
-      - name: reinitialize_db
-        run: PGPASSWORD=${{ secrets.DO_PG_PASSWORD }} psql -h ${{ secrets.DO_AGENT_IP }} -p 5432 -U ${{ secrets.DO_PG_USERNAME }} -f $GITHUB_WORKSPACE/deploy/external/postgres/scripts/init_db.sql
+#       - name: reinitialize_db
+#         run: PGPASSWORD=${{ secrets.DO_PG_PASSWORD }} psql -h ${{ secrets.DO_AGENT_IP }} -p 5432 -U ${{ secrets.DO_PG_USERNAME }} -f $GITHUB_WORKSPACE/deploy/external/postgres/scripts/init_db.sql
 
-      - name: apply db schema
-        run: PGPASSWORD=${{ secrets.DO_PG_PASSWORD }} psql ${{ secrets.DO_PG_DATABASE }} -h ${{ secrets.DO_AGENT_IP }} -p 5432 -U ${{ secrets.DO_PG_USERNAME }} -f $GITHUB_WORKSPACE/deploy/external/postgres/scripts/db.sql
+#       - name: apply db schema
+#         run: PGPASSWORD=${{ secrets.DO_PG_PASSWORD }} psql ${{ secrets.DO_PG_DATABASE }} -h ${{ secrets.DO_AGENT_IP }} -p 5432 -U ${{ secrets.DO_PG_USERNAME }} -f $GITHUB_WORKSPACE/deploy/external/postgres/scripts/db.sql
     
       
   reinit_ftp:
@@ -79,9 +79,7 @@ jobs:
         run: |
           echo ${{ secrets.DO_AGENT_PRIVATE_KEY }} > $GITHUB_WORKSPACE/do_private_key
           
-          ssh -i $GITHUB_WORKSPACE/do_private_key root@${{ secrets.DO_AGENT_IP }} 'bash -s' < $GITHUB_WORKSPACE/deploy/scripts/reset_ftp.sh
-          rm -f $GITHUB_WORKSPACE/do_private_key
-      
+          ls
       
       
       
