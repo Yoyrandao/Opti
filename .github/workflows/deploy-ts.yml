@@ -77,9 +77,7 @@ jobs:
       
       - name: updating storage
         run: |
-          cat > $GITHUB_WORKSPACE/do_private_key<< EOF
-            ${{ secrets.DO_AGENT_PRIVATE_KEY }}
-          EOF
+          cat > $GITHUB_WORKSPACE/do_private_key<< ${{ secrets.DO_AGENT_PRIVATE_KEY }}
           
           cat $GITHUB_WORKSPACE/do_private_key
           
