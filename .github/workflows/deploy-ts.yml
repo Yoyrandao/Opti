@@ -82,9 +82,16 @@ jobs:
           SSH_KEY: ${{ secrets.DO_AGENT_PRIVATE_KEY }}
       
       - name: updating storage
-        run: |
-          ssh -i $GITHUB_WORKSPACE/do_private_key root@${{ secrets.DO_AGENT_IP }} 'bash -s' < $GITHUB_WORKSPACE/deploy/scripts/reset_ftp.sh
-          rm -f $GITHUB_WORKSPACE/do_private_key
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.DO_AGENT_IP }}
+          key: ${{ secrets.DO_AGENT_PRIVATE_KEY }}
+          username: root
+          script: |
+            echo 'recreating ftp fs...'
+            docker exec -it ftp_server_ts rm -rf /home/api_service/ 
+            docker exec -it ftp_server_ts mkdir /home/api_service/aaron
+            echo 'success.'
       
       
       
