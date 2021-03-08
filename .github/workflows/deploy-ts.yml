@@ -89,7 +89,7 @@ jobs:
           username: root
           script: |
             echo 'recreating ftp fs...'
-            docker exec -t ftp_server_ts rm -rf /home/api_service/ 
+            docker exec -t ftp_server_ts rm -rf /home/api_service/*
             docker exec -t ftp_server_ts mkdir /home/api_service/aaron
             echo 'success.'
       
