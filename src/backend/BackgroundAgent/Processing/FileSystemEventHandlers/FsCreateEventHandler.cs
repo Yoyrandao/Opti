@@ -1,18 +1,22 @@
 ﻿using System.IO;
 
+using BackgroundAgent.Processing.Models;
+
 using CommonTypes.Programmability;
 
 using Serilog;
 
-namespace BackgroundAgent.FileSystemEventHandlers
+namespace BackgroundAgent.Processing.FileSystemEventHandlers
 {
     public class FsCreateEventHandler : IFsCreateEventHandler
     {
         public FsCreateEventHandler()
         {
-            _createQueue = new QueueSet<string>();
+            _createQueue = new QueueSet<FsEvent>();
             _createQueue.OnPush += ProcessInternal;
         }
+
+        #region Implementation of IFsCreateEventHandler
 
         public void OnCreated(object sender, FileSystemEventArgs ea)
         {
@@ -20,12 +24,14 @@ namespace BackgroundAgent.FileSystemEventHandlers
                 return;
 
             _logger.Information($"Processing file creation ({ea.FullPath}).");
-            _createQueue.Push(ea.FullPath);
+            _createQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name });
         }
+
+        #endregion
 
         private static void ProcessInternal() { }
 
-        private volatile QueueSet<string> _createQueue;
+        private volatile QueueSet<FsEvent> _createQueue;
         private readonly ILogger _logger = Log.ForContext<FsCreateEventHandler>();
     }
 }

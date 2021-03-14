@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-using BackgroundAgent.FileSystemEventHandlers;
+using BackgroundAgent.Processing.FileSystemEventHandlers;
 
 using Microsoft.Extensions.Hosting;
 
@@ -29,39 +29,40 @@ namespace BackgroundAgent.Workers
         {
             var homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
             var applicationDirectory = Path.Combine(homeDirectory, ".opti");
+            var applicationDataDirectory = Path.Combine(applicationDirectory, "data");
 
-            SubscribeToFilesystemEvents(applicationDirectory);
+            InitializeApplicationStructure(applicationDirectory);
+            SubscribeToFilesystemEvents(applicationDataDirectory);
+            
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (!Directory.Exists(applicationDirectory))
-                {
-                    _logger.Information($"Creating application folder ({applicationDirectory})");
-
-                    Directory.CreateDirectory(applicationDirectory);
-                    InitializeApplicationStructure(applicationDirectory);
-                }
+                InitializeApplicationStructure(applicationDirectory);
 
                 await Task.Delay(10000, stoppingToken);
             }
         }
 
-        private static void InitializeApplicationStructure(string applicationRoot)
+        private void InitializeApplicationStructure(string applicationRoot)
         {
-            Directory.CreateDirectory(Path.Combine(applicationRoot, "data"));
+            if (Directory.Exists(applicationRoot))
+                return;
 
-            // and more
+            _logger.Information($"Creating application folder ({applicationRoot})");
+
+            Directory.CreateDirectory(applicationRoot);
+            Directory.CreateDirectory(Path.Combine(applicationRoot, "data"));
         }
 
-        private void SubscribeToFilesystemEvents(string applicationRoot)
+        private void SubscribeToFilesystemEvents(string applicationData)
         {
-            _fsWatcher.Path = applicationRoot;
+            _fsWatcher.Path = applicationData;
             
             _fsWatcher.Changed += _changeEventHandler.OnChanged;
             _fsWatcher.Created += _createEventHandler.OnCreated;
             _fsWatcher.Deleted += _deleteEventHandler.OnDeleted;
             
-            _fsWatcher.IncludeSubdirectories = true;
             _fsWatcher.EnableRaisingEvents = true;
+            _fsWatcher.IncludeSubdirectories = true;
         }
 
         private readonly FileSystemWatcher _fsWatcher;

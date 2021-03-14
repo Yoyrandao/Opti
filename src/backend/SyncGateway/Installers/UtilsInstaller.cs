@@ -6,6 +6,7 @@ using SyncGateway.Contracts.Out;
 using SyncGateway.Exceptions;
 using SyncGateway.Exceptions.Shields;
 
+using Utils.Http;
 using Utils.Retrying;
 
 // ReSharper disable BadParensLineBreaks

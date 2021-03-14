@@ -2,7 +2,7 @@
 
 using CommonTypes.Constants;
 
-namespace SyncGateway.Contracts.Out
+namespace Utils.Http
 {
     [Serializable]
     public record ResponseError

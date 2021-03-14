@@ -9,6 +9,8 @@ using SyncGateway.Exceptions.Shields;
 using SyncGateway.Helpers;
 using SyncGateway.Services;
 
+using Utils.Http;
+
 namespace SyncGateway.Controllers
 {
     [ApiController]

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 
-using BackgroundAgent.FileSystemEventHandlers;
+using BackgroundAgent.Processing.FileSystemEventHandlers;
+using BackgroundAgent.Processing.Services;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +16,8 @@ namespace BackgroundAgent.Installers
             services.AddTransient<IFsDeleteEventHandler, FsDeleteEventHandler>();
             
             services.AddSingleton<FileSystemWatcher>();
+
+            services.AddTransient<IChangeEventProcessingService, ChangeEventProcessingService>();
 
             return services;
         }

@@ -1,7 +1,7 @@
 ﻿#nullable enable
 using System;
 
-namespace SyncGateway.Contracts.Out
+namespace Utils.Http
 {
     [Serializable]
     public record ApiResponse

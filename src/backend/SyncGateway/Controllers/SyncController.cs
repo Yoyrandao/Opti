@@ -13,6 +13,8 @@ using SyncGateway.Contracts.Out;
 using SyncGateway.Exceptions.Shields;
 using SyncGateway.Helpers;
 
+using Utils.Http;
+
 namespace SyncGateway.Controllers
 {
     [ApiController]

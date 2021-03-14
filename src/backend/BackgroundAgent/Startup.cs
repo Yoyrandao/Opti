@@ -19,7 +19,10 @@ namespace BackgroundAgent
                .ReadFrom.Configuration(_configuration, "Serilog")
                .CreateLogger();
 
-            services.InstallLogic();
+            services
+               .InstallLogic()
+               .InstallUtils()
+               .InstallConfiguration(_configuration);
             services.AddHostedService<InitializationWorker>();
         }
 

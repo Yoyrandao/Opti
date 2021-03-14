@@ -1,18 +1,22 @@
 ﻿using System.IO;
 
+using BackgroundAgent.Processing.Models;
+
 using CommonTypes.Programmability;
 
 using Serilog;
 
-namespace BackgroundAgent.FileSystemEventHandlers
+namespace BackgroundAgent.Processing.FileSystemEventHandlers
 {
     public class FsDeleteEventHandler : IFsDeleteEventHandler
     {
         public FsDeleteEventHandler()
         {
-            _deleteQueue = new QueueSet<string>();
+            _deleteQueue = new QueueSet<FsEvent>();
             _deleteQueue.OnPush += ProcessInternal;
         }
+
+        #region Implementation of IFsDeleteEventHandler
 
         public void OnDeleted(object sender, FileSystemEventArgs ea)
         {
@@ -20,12 +24,14 @@ namespace BackgroundAgent.FileSystemEventHandlers
                 return;
 
             _logger.Information($"Processing file deletion ({ea.FullPath}).");
-            _deleteQueue.Push(ea.FullPath);
+            _deleteQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name });
         }
+
+        #endregion
 
         private static void ProcessInternal() { }
 
-        private volatile QueueSet<string> _deleteQueue;
+        private volatile QueueSet<FsEvent> _deleteQueue;
         private readonly ILogger _logger = Log.ForContext<FsDeleteEventHandler>();
     }
 }

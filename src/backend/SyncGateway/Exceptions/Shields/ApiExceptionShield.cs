@@ -11,6 +11,8 @@ using Serilog;
 
 using SyncGateway.Contracts.Out;
 
+using Utils.Http;
+
 namespace SyncGateway.Exceptions.Shields
 {
     public class ApiExceptionShield : IExceptionShield<ApiResponse>

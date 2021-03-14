@@ -24,5 +24,10 @@ namespace CommonTypes.Programmability
             Enqueue(@object);
             OnPush();
         }
+
+        public T? Pop()
+        {
+            return base.Dequeue() as T;
+        }
     }
 }
