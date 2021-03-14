@@ -12,6 +12,8 @@
         internal static class User
         {
             public const string Registration = Root + "/register";
+            
+            public const string ResourceState = Root + "/filestate";
         }
     }
 }

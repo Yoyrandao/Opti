@@ -115,8 +115,15 @@ $$;
 
 --DATA
 
-insert into public.user(accountuid, login, folder, creationtimestamp, modificationtimestamp)
-values (uuid_generate_v4(), 'aaron', 'aaron', now(), now());
+INSERT INTO public.user(accountuid, login, folder, creationtimestamp, modificationtimestamp)
+VALUES (uuid_generate_v4(), 'aaron', 'aaron', now(), now());
+
+INSERT INTO public.fileparts(folder, partname, hash, parentid, basefilename, creationtimestamp, modificationtimestamp)
+VALUES
+	('aaron', 'firstPartName', '4752c38d26b83408af699cdf8841ac6c', NULL, 'filename.txt', now(), now()),
+	('aaron', 'secondPartName', 'f3bc96df7ff110b25feafc47ebc87bb6', 1, 'filename.txt', now(), now()),
+	('aaron', 'thirdPartName', 'd7d6b3d3b40e84296ee65bad9749eaff', 2, 'filename.txt', now(), now()),
+	('aaron', 'fourthPartName', '053e58016773918f6bf7c368db303226', 3, 'filename.txt', now(), now());
 
 
 --PERMISSIONS

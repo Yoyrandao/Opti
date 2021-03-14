@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FtpDataAccess", "common\Ftp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "common\Utils\Utils.csproj", "{C403168D-D32C-455C-964F-912AB1E50B5D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundAgent", "backend\BackgroundAgent\BackgroundAgent.csproj", "{FBB3793D-C576-485C-9A2A-314368883728}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,7 @@ Global
 		{7A726722-57D1-4C73-80CA-AED3351CF1E9} = {E7C51210-A3BF-4491-9339-6EAB796117E1}
 		{571B26CE-B935-4125-955C-E49D47759489} = {E7C51210-A3BF-4491-9339-6EAB796117E1}
 		{C403168D-D32C-455C-964F-912AB1E50B5D} = {E7C51210-A3BF-4491-9339-6EAB796117E1}
+		{FBB3793D-C576-485C-9A2A-314368883728} = {BAF959E5-2DBE-43A3-BEDB-4A4A237D2229}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F13B4EE1-0ED1-4717-B523-E7DE5161FE05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -47,5 +50,9 @@ Global
 		{C403168D-D32C-455C-964F-912AB1E50B5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C403168D-D32C-455C-964F-912AB1E50B5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C403168D-D32C-455C-964F-912AB1E50B5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBB3793D-C576-485C-9A2A-314368883728}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBB3793D-C576-485C-9A2A-314368883728}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBB3793D-C576-485C-9A2A-314368883728}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBB3793D-C576-485C-9A2A-314368883728}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

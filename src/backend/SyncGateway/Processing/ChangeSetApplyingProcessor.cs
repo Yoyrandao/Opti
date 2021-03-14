@@ -21,11 +21,9 @@ namespace SyncGateway.Processing
 {
     public class ChangeSetApplyingProcessor : BasicProcessor
     {
-        public ChangeSetApplyingProcessor(IFilePartRepository  filePartRepository,
-                                          IFolderRepository    folderRepository,
-                                          IRepeater<Exception> repeater,
-                                          ITransactionFactory  transactionFactory,
-                                          IMapper              mapper)
+        public ChangeSetApplyingProcessor(
+            IFilePartRepository filePartRepository, IFolderRepository folderRepository, IRepeater<Exception> repeater,
+            ITransactionFactory transactionFactory, IMapper mapper)
         {
             _mapper = mapper;
             _repeater = repeater;
@@ -57,12 +55,12 @@ namespace SyncGateway.Processing
                         if (record.IsFirst)
                         {
                             _filePartRepository.Add(_mapper.Map<FilePart>(record,
-                                opt => opt.AfterMap((src, dest) => dest.Folder = data.Identity)));
+                                opt => opt.AfterMap((_, dest) => dest.Folder = data.Identity)));
                         }
                         else
                         {
                             _filePartRepository.AppendToFile(_mapper.Map<FilePart>(record,
-                                opt => opt.AfterMap((src, dest) => dest.Folder = data.Identity)));
+                                opt => opt.AfterMap((_, dest) => dest.Folder = data.Identity)));
                         }
                     }
                     else

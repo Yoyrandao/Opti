@@ -121,6 +121,7 @@ namespace DataAccess.Repositories
                                           fp.partName,
                                           fp.parentId,
                                           fp.baseFileName,
+                                          fp.hash,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -159,6 +160,23 @@ namespace DataAccess.Repositories
                                    WHERE fp.folder LIKE @Folder";
 
             return _executor.List<FilePart>(query, new { Folder = folder });
+        }
+
+        public IEnumerable<FilePart> GetFileByName(string name)
+        {
+            const string query = @"SELECT fp.id,
+                                          fp.folder,
+                                          fp.partName,
+                                          fp.parentId,
+                                          fp.baseFileName,
+                                          fp.hash,
+                                          fp.compressed,
+                                          fp.creationTimestamp,
+                                          fp.modificationTimestamp
+                                  FROM public.fileParts fp
+                                  WHERE fp.baseFileName LIKE @Name";
+
+            return _executor.List<FilePart>(query, new { Name = name });
         }
 
         #endregion

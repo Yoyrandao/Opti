@@ -25,5 +25,7 @@ namespace DataAccess.Repositories
         IEnumerable<FilePart> GetAll();
 
         IEnumerable<FilePart> GetAllFromFolder(string folder);
+
+        IEnumerable<FilePart> GetFileByName(string name);
     }
 }
