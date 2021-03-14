@@ -28,4 +28,8 @@
       <ProjectReference Include="..\..\common\CommonTypes\CommonTypes.csproj" />
       <ProjectReference Include="..\..\common\Utils\Utils.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Processing\Tasks" />
+    </ItemGroup>
 </Project>

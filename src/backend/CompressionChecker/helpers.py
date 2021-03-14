@@ -33,10 +33,10 @@ def fill_file_data_contract(request_data: object) -> file_data_contract:
 
 	model = file_data_contract()
 	try:
-		model.file_name = request_data['fileName']
-		model.size = request_data['fileSize']
-		model.type = request_data['fileType']
-		model.entropy = request_data['fileEntropy']
+		model.file_name = request_data['FileName']
+		model.size = request_data['FileSize']
+		model.type = request_data['FileType']
+		model.entropy = request_data['FileEntropy']
 
 		log.info('Model deserialized')
 		

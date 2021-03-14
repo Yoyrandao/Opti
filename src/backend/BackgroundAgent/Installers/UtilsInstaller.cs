@@ -1,5 +1,4 @@
-﻿using BackgroundAgent.Configuration;
-using BackgroundAgent.Requests;
+﻿using BackgroundAgent.Requests;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,9 +10,7 @@ namespace BackgroundAgent.Installers
     {
         public static IServiceCollection InstallUtils(this IServiceCollection services)
         {
-            services.AddTransient<IRestClientFactory, RestClientFactory>(x =>
-                new RestClientFactory(x.GetService<EndpointConfiguration>()?.Backend));
-
+            services.AddTransient<IRestClientFactoryResolver, RestClientFactoryResolver>();
             services.AddTransient<IRequestFactory, RequestFactory>();
 
             return services;
