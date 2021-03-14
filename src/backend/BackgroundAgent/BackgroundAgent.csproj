@@ -19,4 +19,8 @@
         <DependentUpon>appsettings.json</DependentUpon>
       </Content>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\common\CommonTypes\CommonTypes.csproj" />
+    </ItemGroup>
 </Project>

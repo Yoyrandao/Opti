@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using BackgroundAgent.Installers;
+using BackgroundAgent.Workers;
+
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,7 +19,8 @@ namespace BackgroundAgent
                .ReadFrom.Configuration(_configuration, "Serilog")
                .CreateLogger();
 
-            services.AddHostedService<Worker>();
+            services.InstallLogic();
+            services.AddHostedService<InitializationWorker>();
         }
 
         private static IConfiguration _configuration;
