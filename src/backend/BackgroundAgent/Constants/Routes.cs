@@ -3,5 +3,7 @@
     public static class Routes
     {
         public static string Sync { get; } = "api/filestate";
+
+        public static string CheckCompression { get; } = "/check";
     }
 }

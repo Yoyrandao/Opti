@@ -16,15 +16,17 @@ from helpers import fill_file_data_contract, checked_response_encoder, get_confi
 
 """ Additional configuration """
 
-seqlog.configure_from_file('secrets/logger_config.yml')
-seqlog.set_global_log_properties(
-	Application="CompressionChecker",
-	AssemblyVersion="0.0.0.1"
-)
 
 arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('environment', metavar='env', type=str, help='and environment identifier')
 args = arg_parser.parse_args()
+
+if args.environment != 'local':
+	seqlog.configure_from_file('secrets/logger_config.yml')
+seqlog.set_global_log_properties(
+	Application="CompressionChecker",
+	AssemblyVersion="0.0.0.1"
+)
 
 config = get_config(args.environment)
 
@@ -42,6 +44,7 @@ def confirm_check_request():
 
 	try:
 		request_data = request.get_json()
+		print(request_data)
 		contract = fill_file_data_contract(request_data)
 
 		model = joblib.load('./data/dtc_compression.sav')

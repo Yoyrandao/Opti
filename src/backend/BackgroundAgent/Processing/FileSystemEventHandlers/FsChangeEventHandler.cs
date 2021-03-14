@@ -11,7 +11,7 @@ namespace BackgroundAgent.Processing.FileSystemEventHandlers
 {
     public class FsChangeEventHandler : IFsChangeEventHandler
     {
-        public FsChangeEventHandler(IChangeEventProcessingService service)
+        public FsChangeEventHandler(ICompressionCheckService service)
         {
             _service = service;
             _changeQueue = new QueueSet<FsEvent>();
@@ -31,15 +31,10 @@ namespace BackgroundAgent.Processing.FileSystemEventHandlers
 
         #endregion
 
-        private void ProcessInternal()
-        {
-            var @event = _changeQueue.Pop();
-
-            _service.ApplyChangeEvent(@event);
-        }
+        private void ProcessInternal() { }
 
         private volatile QueueSet<FsEvent> _changeQueue;
-        private readonly IChangeEventProcessingService _service;
+        private readonly ICompressionCheckService _service;
         
         private readonly ILogger _logger = Log.ForContext<FsChangeEventHandler>();
     }

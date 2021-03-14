@@ -26,9 +26,9 @@ namespace SyncGateway.Processing
         {
             EnsureArg.IsNotNull(contract);
             var username = (contract as RegistrationContract)!.Username;
-            
+
             _logger.Information($"Executing UserDatabaseRegistrationProcessor ({username}).");
-            
+
             _userRepository.Register(username);
 
             _repeater.Process(() =>

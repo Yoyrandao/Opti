@@ -1,4 +1,5 @@
 ﻿using BackgroundAgent.Constants;
+using BackgroundAgent.Processing.Models;
 
 using RestSharp;
 
@@ -15,6 +16,18 @@ namespace BackgroundAgent.Requests
                 Resource = Routes.Sync
             };
             request.AddParameter("filename", filename);
+
+            return request;
+        }
+
+        public IRestRequest CreateCheckCompressionRequest(FileMetaInfo metaInfo)
+        {
+            var request = new RestRequest(Method.POST)
+            {
+                Resource = Routes.CheckCompression
+            };
+
+            request.AddJsonBody(metaInfo);
 
             return request;
         }

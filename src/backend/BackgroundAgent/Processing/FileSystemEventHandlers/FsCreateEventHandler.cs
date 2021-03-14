@@ -1,6 +1,7 @@
 ﻿using System.IO;
 
 using BackgroundAgent.Processing.Models;
+using BackgroundAgent.Processing.Tasks;
 
 using CommonTypes.Programmability;
 
@@ -10,8 +11,9 @@ namespace BackgroundAgent.Processing.FileSystemEventHandlers
 {
     public class FsCreateEventHandler : IFsCreateEventHandler
     {
-        public FsCreateEventHandler()
+        public FsCreateEventHandler(NewFileOperationTask task)
         {
+            _task = task;
             _createQueue = new QueueSet<FsEvent>();
             _createQueue.OnPush += ProcessInternal;
         }
@@ -29,9 +31,19 @@ namespace BackgroundAgent.Processing.FileSystemEventHandlers
 
         #endregion
 
-        private static void ProcessInternal() { }
+        private void ProcessInternal()
+        {
+            var file = _createQueue.Pop();
+
+            if (file == null)
+                return;
+            
+            _task.Process(file.FilePath);
+        }
 
         private volatile QueueSet<FsEvent> _createQueue;
+
+        private readonly NewFileOperationTask _task;
         private readonly ILogger _logger = Log.ForContext<FsCreateEventHandler>();
     }
 }

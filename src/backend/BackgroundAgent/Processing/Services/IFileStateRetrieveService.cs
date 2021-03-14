@@ -5,7 +5,7 @@ using BackgroundAgent.Processing.Models;
 
 namespace BackgroundAgent.Processing.Services
 {
-    public interface IChangeEventProcessingService
+    public interface IFileStateRetrieveService
     {
         ICollection<FileState> ApplyChangeEvent(FsEvent @event);
     }
