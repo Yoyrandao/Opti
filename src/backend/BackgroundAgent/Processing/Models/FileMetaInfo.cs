@@ -4,7 +4,7 @@
     {
         public string FileName { get; init; }
         
-        public long FileSize { get; init; }
+        public int FileSize { get; init; }
         
         public string FileType { get; init; }
         
