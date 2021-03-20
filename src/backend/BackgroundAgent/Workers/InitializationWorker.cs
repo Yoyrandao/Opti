@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
+using BackgroundAgent.Constants;
 using BackgroundAgent.Processing.FileSystemEventHandlers;
 
 using Microsoft.Extensions.Hosting;
@@ -27,42 +29,54 @@ namespace BackgroundAgent.Workers
         
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var homeDirectory = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-            var applicationDirectory = Path.Combine(homeDirectory, ".opti");
-            var applicationDataDirectory = Path.Combine(applicationDirectory, "data");
-
-            InitializeApplicationStructure(applicationDirectory);
-            SubscribeToFilesystemEvents(applicationDataDirectory);
+            InitializeApplicationStructure();
+            InitializeKeys();
+            SubscribeToFilesystemEvents();
             
             while (!stoppingToken.IsCancellationRequested)
             {
-                InitializeApplicationStructure(applicationDirectory);
+                InitializeApplicationStructure();
 
                 await Task.Delay(10000, stoppingToken);
             }
         }
 
-        private void InitializeApplicationStructure(string applicationRoot)
+        private void InitializeApplicationStructure()
         {
-            if (Directory.Exists(applicationRoot))
+            if (Directory.Exists(FsLocation.ApplicationRoot))
                 return;
 
-            _logger.Information($"Creating application folder ({applicationRoot})");
+            _logger.Information($"Creating application folder ({FsLocation.ApplicationRoot})");
 
-            Directory.CreateDirectory(applicationRoot);
-            Directory.CreateDirectory(Path.Combine(applicationRoot, "data"));
+            Directory.CreateDirectory(FsLocation.ApplicationRoot);
+            Directory.CreateDirectory(FsLocation.ApplicationData);
+            Directory.CreateDirectory(FsLocation.ApplicationTempData);
         }
 
-        private void SubscribeToFilesystemEvents(string applicationData)
+        private void SubscribeToFilesystemEvents()
         {
-            _fsWatcher.Path = applicationData;
+            _fsWatcher.Path = FsLocation.ApplicationData;
             
-            _fsWatcher.Changed += _changeEventHandler.OnChanged;
+            // _fsWatcher.Changed += _changeEventHandler.OnChanged;
             _fsWatcher.Created += _createEventHandler.OnCreated;
-            _fsWatcher.Deleted += _deleteEventHandler.OnDeleted;
+            // _fsWatcher.Deleted += _deleteEventHandler.OnDeleted;
             
             _fsWatcher.EnableRaisingEvents = true;
             _fsWatcher.IncludeSubdirectories = true;
+        }
+
+        private static void InitializeKeys()
+        {
+            if (File.Exists(FsLocation.ApplicationPrivateKey) && File.Exists(FsLocation.ApplicationPublicKey))
+                return;
+            
+            var cryptoProvider = new RSACryptoServiceProvider();
+            
+            var privateKey = cryptoProvider.ExportRSAPrivateKey();
+            var publicKey = cryptoProvider.ExportRSAPublicKey();
+            
+            File.WriteAllBytes(FsLocation.ApplicationPrivateKey, privateKey);
+            File.WriteAllBytes(FsLocation.ApplicationPublicKey, publicKey);
         }
 
         private readonly FileSystemWatcher _fsWatcher;

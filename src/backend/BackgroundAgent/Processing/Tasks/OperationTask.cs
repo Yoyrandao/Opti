@@ -6,7 +6,7 @@ namespace BackgroundAgent.Processing.Tasks
 {
     public class OperationTask
     {
-        public OperationTask(BasicProcessor[] processors)
+        protected OperationTask(BasicProcessor[] processors)
         {
             _processors = processors;
 

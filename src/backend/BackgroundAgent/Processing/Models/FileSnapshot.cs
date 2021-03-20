@@ -6,6 +6,12 @@
 
         public string Path { get; set; }
 
+        public string CompressedPath { get; set; }
+
+        public string EncryptedPath { get; set; }
+
+        public string DecryptedPath { get; set; }
+
         public string PartName { get; set; }
 
         public bool Compressed { get; set; }

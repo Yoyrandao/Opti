@@ -44,7 +44,10 @@ namespace BackgroundAgent.Installers
                 {
                     new MetaInfoProcessor(x.GetService<IMetaInfoGatherService>()),
                     new CompressionCheckProcessor(x.GetService<ICompressionCheckService>()),
-                    new CompressionProcessor()
+                    new CompressionProcessor(),
+                    new EncryptionProcessor(),
+                    new DecryptionProcessor(),
+                    new DecompressionProcessor()
                 }));
 
             return services;

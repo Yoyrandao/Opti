@@ -1,10 +1,14 @@
-﻿using BackgroundAgent.Processing.Models;
+﻿using System.IO;
+using System.IO.Compression;
+
+using BackgroundAgent.Constants;
+using BackgroundAgent.Processing.Models;
 
 using EnsureThat;
 
 namespace BackgroundAgent.Processing.Tasks.Processors
 {
-    public class CompressionProcessor: BasicProcessor
+    public class CompressionProcessor : BasicProcessor
     {
         public override void Process(object contract)
         {
@@ -13,10 +17,25 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             if (!snapshot.Compressed)
             {
-                Successor?.Process(null);
+                Successor?.Process(snapshot);
             }
-            
-            //TODO: NEXT SERVICE HERE
+
+            var compressedFileLocation = Path.Combine(FsLocation.ApplicationTempData, snapshot.BaseFileName + ".compressed");
+            var fileInfo = new FileInfo(snapshot.Path);
+
+            using (var originFileStream = fileInfo.OpenRead())
+            {
+                using (var compressedFileStream = File.Create(compressedFileLocation))
+                {
+                    using (var compressionStream = new DeflateStream(compressedFileStream, CompressionMode.Compress))
+                    {
+                        originFileStream.CopyTo(compressionStream);
+                    }
+                }
+            }
+
+            snapshot.CompressedPath = compressedFileLocation;
+            Successor?.Process(snapshot);
         }
     }
 }
