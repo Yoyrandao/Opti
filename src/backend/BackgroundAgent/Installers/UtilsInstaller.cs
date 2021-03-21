@@ -2,6 +2,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
+using Utils.Hashing;
 using Utils.Http;
 
 namespace BackgroundAgent.Installers
@@ -12,6 +13,8 @@ namespace BackgroundAgent.Installers
         {
             services.AddTransient<IRestClientFactoryResolver, RestClientFactoryResolver>();
             services.AddTransient<IRequestFactory, RequestFactory>();
+
+            services.AddTransient<IHashProvider, Sha256HashProvider>();
 
             return services;
         }

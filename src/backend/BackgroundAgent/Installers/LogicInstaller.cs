@@ -18,6 +18,11 @@ namespace BackgroundAgent.Installers
     {
         public static IServiceCollection InstallLogic(this IServiceCollection services)
         {
+            InstallProcessors(services);
+            
+            services.AddTransient<ISymmentricalCryptoService, SymmetricalCryptoService>();
+            services.AddTransient<IAsymmetricalCryptoService, AssymentricalCryptoService>();
+            
             services.AddTransient<IFsChangeEventHandler, FsChangeEventHandler>();
             services.AddTransient<IFsCreateEventHandler, FsCreateEventHandler>();
             services.AddTransient<IFsDeleteEventHandler, FsDeleteEventHandler>();
@@ -42,15 +47,25 @@ namespace BackgroundAgent.Installers
             services.AddTransient(
                 x => new NewFileOperationTask(new BasicProcessor[]
                 {
-                    new MetaInfoProcessor(x.GetService<IMetaInfoGatherService>()),
-                    new CompressionCheckProcessor(x.GetService<ICompressionCheckService>()),
-                    new CompressionProcessor(),
-                    new EncryptionProcessor(),
-                    new DecryptionProcessor(),
-                    new DecompressionProcessor()
+                    x.GetService<MetaInfoProcessor>(),
+                    x.GetService<CompressionCheckProcessor>(),
+                    x.GetService<CompressionProcessor>(),
+                    x.GetService<EncryptionProcessor>(),
+                    x.GetService<SliceProcessor>()
                 }));
 
             return services;
+        }
+
+        private static void InstallProcessors(IServiceCollection services)
+        {
+            services.AddTransient<MetaInfoProcessor>();
+            services.AddTransient<CompressionCheckProcessor>();
+            services.AddTransient<CompressionProcessor>();
+            services.AddTransient<DecompressionProcessor>();
+            services.AddTransient<EncryptionProcessor>();
+            services.AddTransient<DecryptionProcessor>();
+            services.AddTransient<SliceProcessor>();
         }
     }
 }

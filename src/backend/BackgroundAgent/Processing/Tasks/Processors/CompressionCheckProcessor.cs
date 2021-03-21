@@ -4,6 +4,8 @@ using BackgroundAgent.Processing.Services;
 
 using EnsureThat;
 
+using Serilog;
+
 namespace BackgroundAgent.Processing.Tasks.Processors
 {
     public class CompressionCheckProcessor : BasicProcessor
@@ -17,6 +19,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
         {
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
+            
+            _logger.Information($"Running compression check process for {snapshot.BaseFileName}");
 
             var decision = _compressionCheckService.Check(snapshot.MetaInfo);
             snapshot.Compressed = decision;
@@ -25,5 +29,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
         }
 
         private readonly ICompressionCheckService _compressionCheckService;
+
+        private readonly ILogger _logger = Log.ForContext<CompressionCheckService>();
     }
 }

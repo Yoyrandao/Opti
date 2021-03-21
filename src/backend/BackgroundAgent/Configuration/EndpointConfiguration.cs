@@ -1,5 +1,8 @@
-﻿namespace BackgroundAgent.Configuration
+﻿using System;
+
+namespace BackgroundAgent.Configuration
 {
+    [Serializable]
     public record EndpointConfiguration
     {
         public string Backend { get; init; }

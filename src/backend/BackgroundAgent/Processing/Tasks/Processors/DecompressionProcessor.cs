@@ -6,6 +6,9 @@ using BackgroundAgent.Processing.Models;
 
 using EnsureThat;
 
+using Serilog;
+using Serilog.Core;
+
 namespace BackgroundAgent.Processing.Tasks.Processors
 {
     public class DecompressionProcessor : BasicProcessor
@@ -14,6 +17,16 @@ namespace BackgroundAgent.Processing.Tasks.Processors
         {
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
+
+            if (!snapshot.Compressed)
+            {
+                _logger.Information($"Skipping decompression process for {snapshot.BaseFileName}");
+                Successor?.Process(snapshot);
+
+                return;
+            }
+
+            _logger.Information($"Running decompression process for {snapshot.BaseFileName}");
 
             var decompressedFileLocation =
                 Path.Combine(FsLocation.ApplicationTempData, snapshot.BaseFileName + ".decompressed");
@@ -33,5 +46,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             Successor?.Process(snapshot);
         }
+
+        private readonly ILogger _logger = Log.ForContext<DecompressionProcessor>();
     }
 }

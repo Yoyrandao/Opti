@@ -1,9 +1,9 @@
-﻿namespace BackgroundAgent.Processing.Models
+﻿using System.Collections.Generic;
+
+namespace BackgroundAgent.Processing.Models
 {
     public record FileSnapshot
     {
-        public string Hash { get; set; }
-
         public string Path { get; set; }
 
         public string CompressedPath { get; set; }
@@ -12,7 +12,7 @@
 
         public string DecryptedPath { get; set; }
 
-        public string PartName { get; set; }
+        public List<FilePart> Parts { get; set; }
 
         public bool Compressed { get; set; }
 

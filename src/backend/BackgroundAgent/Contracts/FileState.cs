@@ -1,5 +1,8 @@
-﻿namespace BackgroundAgent.Contracts
+﻿using System;
+
+namespace BackgroundAgent.Contracts
 {
+    [Serializable]
     public record FileState
     {
         public string Hash { get; init; }

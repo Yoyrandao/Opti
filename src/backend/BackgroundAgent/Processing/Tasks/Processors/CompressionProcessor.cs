@@ -6,6 +6,8 @@ using BackgroundAgent.Processing.Models;
 
 using EnsureThat;
 
+using Serilog;
+
 namespace BackgroundAgent.Processing.Tasks.Processors
 {
     public class CompressionProcessor : BasicProcessor
@@ -17,8 +19,13 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             if (!snapshot.Compressed)
             {
+                _logger.Information($"Skipping compression process for {snapshot.BaseFileName}");
                 Successor?.Process(snapshot);
+
+                return;
             }
+            
+            _logger.Information($"Running compression process for {snapshot.BaseFileName}");
 
             var compressedFileLocation = Path.Combine(FsLocation.ApplicationTempData, snapshot.BaseFileName + ".compressed");
             var fileInfo = new FileInfo(snapshot.Path);
@@ -37,5 +44,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             snapshot.CompressedPath = compressedFileLocation;
             Successor?.Process(snapshot);
         }
+
+        private readonly ILogger _logger = Log.ForContext<CompressionProcessor>();
     }
 }

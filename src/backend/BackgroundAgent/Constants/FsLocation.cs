@@ -15,6 +15,8 @@ namespace BackgroundAgent.Constants
 
         public static string ApplicationPrivateKey => Path.Combine(ApplicationRoot, "p");
 
-        public static string ApplicationPublicKey => Path.Combine(ApplicationRoot, "pub");
+        public static string ApplicationEncryptionKey => Path.Combine(ApplicationRoot, "s");
+
+        public static string ApplicationEncryptionIv => Path.Combine(ApplicationRoot, "iv");
     }
 }

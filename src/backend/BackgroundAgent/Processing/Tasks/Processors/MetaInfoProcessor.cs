@@ -1,7 +1,11 @@
-﻿using BackgroundAgent.Processing.Models;
+﻿using System.Collections.Generic;
+
+using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Processing.Services;
 
 using EnsureThat;
+
+using Serilog;
 
 namespace BackgroundAgent.Processing.Tasks.Processors
 {
@@ -17,6 +21,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var path = contract as string;
             EnsureArg.IsNotNull(path);
 
+            _logger.Information($"Running info gathering process for {path}");
+
             var fileMetaInfo = _infoGatherService.Gather(path);
 
             var snapshot = new FileSnapshot
@@ -30,5 +36,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
         }
 
         private readonly IMetaInfoGatherService _infoGatherService;
+
+        private readonly ILogger _logger = Log.ForContext<MetaInfoGatherService>();
     }
 }
