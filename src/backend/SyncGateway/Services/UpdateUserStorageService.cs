@@ -1,6 +1,7 @@
-﻿using Serilog;
+﻿using CommonTypes.Contracts;
 
-using SyncGateway.Contracts.Common;
+using Serilog;
+
 using SyncGateway.Processing;
 
 namespace SyncGateway.Services

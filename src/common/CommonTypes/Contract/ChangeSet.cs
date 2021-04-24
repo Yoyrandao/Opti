@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SyncGateway.Contracts.Common
+namespace CommonTypes.Contracts
 {
     [Serializable]
     public record ChangeSet

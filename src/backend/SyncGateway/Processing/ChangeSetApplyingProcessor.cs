@@ -3,6 +3,8 @@ using System.IO;
 
 using AutoMapper;
 
+using CommonTypes.Contracts;
+
 using DataAccess.Domain;
 using DataAccess.Helpers;
 using DataAccess.Repositories;
@@ -12,8 +14,6 @@ using EnsureThat;
 using FtpDataAccess.Repositories;
 
 using Serilog;
-
-using SyncGateway.Contracts.Common;
 
 using Utils.Retrying;
 

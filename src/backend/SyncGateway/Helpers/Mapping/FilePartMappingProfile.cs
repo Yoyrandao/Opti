@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 
+using CommonTypes.Contracts;
+
 using DataAccess.Domain;
 
-using SyncGateway.Contracts.Common;
 using SyncGateway.Contracts.Out;
 
 namespace SyncGateway.Helpers.Mapping

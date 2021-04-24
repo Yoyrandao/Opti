@@ -7,7 +7,6 @@ using BackgroundAgent.Processing.Models;
 using EnsureThat;
 
 using Serilog;
-using Serilog.Core;
 
 namespace BackgroundAgent.Processing.Tasks.Processors
 {

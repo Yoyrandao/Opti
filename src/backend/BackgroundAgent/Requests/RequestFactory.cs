@@ -1,6 +1,8 @@
 ﻿using BackgroundAgent.Constants;
 using BackgroundAgent.Processing.Models;
 
+using CommonTypes.Contracts;
+
 using RestSharp;
 
 namespace BackgroundAgent.Requests
@@ -28,6 +30,18 @@ namespace BackgroundAgent.Requests
             };
 
             request.AddJsonBody(metaInfo);
+
+            return request;
+        }
+
+        public IRestRequest CreateChangeSetSendingRequest(ChangeSet changeSet)
+        {
+            var request = new RestRequest(Method.POST)
+            {
+                Resource = Routes.Update
+            };
+
+            request.AddJsonBody(changeSet);
 
             return request;
         }

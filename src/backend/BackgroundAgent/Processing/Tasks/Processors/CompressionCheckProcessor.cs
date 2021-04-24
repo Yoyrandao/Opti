@@ -1,5 +1,4 @@
-﻿using BackgroundAgent.Contracts;
-using BackgroundAgent.Processing.Models;
+﻿using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Processing.Services;
 
 using EnsureThat;

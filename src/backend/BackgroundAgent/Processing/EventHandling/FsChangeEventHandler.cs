@@ -7,7 +7,7 @@ using CommonTypes.Programmability;
 
 using Serilog;
 
-namespace BackgroundAgent.Processing.FileSystemEventHandlers
+namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsChangeEventHandler : IFsChangeEventHandler
     {

@@ -19,6 +19,8 @@ namespace BackgroundAgent
                .ReadFrom.Configuration(_configuration, "Serilog")
                .CreateLogger();
 
+            Log.Logger.Information("Application started.");
+            
             services
                .InstallLogic()
                .InstallUtils()

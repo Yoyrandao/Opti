@@ -16,9 +16,9 @@ namespace FtpDataAccess.Repositories
 
         #region Implementation of IFolderRepository
 
-        public void UploadFile(Stream stream, string fileName, string folder)
+        public void UploadFile(Stream stream, string filename, string folder)
         {
-            _ftpClient.UploadFile(stream, Path.Join(folder, fileName));
+            _ftpClient.UploadFile(stream, Path.Join(folder, filename));
         }
 
         public void RemoveFile(string filename, string folder)

@@ -1,5 +1,7 @@
 ﻿using BackgroundAgent.Processing.Models;
 
+using CommonTypes.Contracts;
+
 using RestSharp;
 
 namespace BackgroundAgent.Requests
@@ -9,5 +11,7 @@ namespace BackgroundAgent.Requests
         IRestRequest CreateGetFileStateRequest(string filename);
 
         IRestRequest CreateCheckCompressionRequest(FileMetaInfo metaInfo);
+
+        IRestRequest CreateChangeSetSendingRequest(ChangeSet changeSet);
     }
 }

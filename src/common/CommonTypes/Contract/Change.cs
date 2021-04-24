@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SyncGateway.Contracts.Common
+namespace CommonTypes.Contracts
 {
     [Serializable]
     public class Change

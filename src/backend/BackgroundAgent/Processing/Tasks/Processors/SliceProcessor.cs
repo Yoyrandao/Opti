@@ -57,6 +57,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                     
                     snapshot.Parts.Add(new FilePart
                     {
+                        IsFirst = index == 0,
                         Path = partPath,
                         PartName = partName,
                         Hash = _hashProvider.Hash(File.ReadAllText(partPath))
@@ -68,6 +69,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             }
             
             File.Delete(fileToSliceLocation);
+            Successor?.Process(snapshot);
         }
 
         private const int SLICE_LENGTH = 128 * 1024;

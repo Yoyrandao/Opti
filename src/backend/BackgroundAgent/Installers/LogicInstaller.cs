@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-using BackgroundAgent.Processing.FileSystemEventHandlers;
+using BackgroundAgent.Processing.EventHandling;
 using BackgroundAgent.Processing.Logic;
 using BackgroundAgent.Processing.Logic.Calculators;
 using BackgroundAgent.Processing.Services;
@@ -19,10 +19,10 @@ namespace BackgroundAgent.Installers
         public static IServiceCollection InstallLogic(this IServiceCollection services)
         {
             InstallProcessors(services);
-            
+
             services.AddTransient<ISymmentricalCryptoService, SymmetricalCryptoService>();
             services.AddTransient<IAsymmetricalCryptoService, AssymentricalCryptoService>();
-            
+
             services.AddTransient<IFsChangeEventHandler, FsChangeEventHandler>();
             services.AddTransient<IFsCreateEventHandler, FsCreateEventHandler>();
             services.AddTransient<IFsDeleteEventHandler, FsDeleteEventHandler>();
@@ -51,7 +51,8 @@ namespace BackgroundAgent.Installers
                     x.GetService<CompressionCheckProcessor>(),
                     x.GetService<CompressionProcessor>(),
                     x.GetService<EncryptionProcessor>(),
-                    x.GetService<SliceProcessor>()
+                    x.GetService<SliceProcessor>(),
+                    x.GetService<SendDataProcessor>()
                 }));
 
             return services;
@@ -66,6 +67,9 @@ namespace BackgroundAgent.Installers
             services.AddTransient<EncryptionProcessor>();
             services.AddTransient<DecryptionProcessor>();
             services.AddTransient<SliceProcessor>();
+
+            services.AddTransient(x => new SendDataProcessor(x.GetService<IRequestFactory>(),
+                x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway)));
         }
     }
 }

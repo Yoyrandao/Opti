@@ -1,11 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 
 using BackgroundAgent.Constants;
-using BackgroundAgent.Processing.FileSystemEventHandlers;
+using BackgroundAgent.Processing.EventHandling;
 
 using Microsoft.Extensions.Hosting;
 

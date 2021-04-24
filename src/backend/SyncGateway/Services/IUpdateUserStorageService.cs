@@ -1,4 +1,4 @@
-﻿using SyncGateway.Contracts.Common;
+﻿using CommonTypes.Contracts;
 
 namespace SyncGateway.Services
 {

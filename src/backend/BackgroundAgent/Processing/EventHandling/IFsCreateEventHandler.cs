@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace BackgroundAgent.Processing.FileSystemEventHandlers
+namespace BackgroundAgent.Processing.EventHandling
 {
     public interface IFsCreateEventHandler
     {
