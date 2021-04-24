@@ -9,6 +9,7 @@ sklearn = "*"
 joblib = "*"
 flask = "*"
 seqlog = "*"
+urllib3 = ">=1.26.4"
 
 [dev-packages]
 
