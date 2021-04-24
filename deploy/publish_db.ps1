@@ -49,7 +49,7 @@ if (-not($withoutDockerCompose)) {
   Write-Host 'Recreating ftp container...' -ForegroundColor Blue;
   docker rm -f ftp_server;
   docker volume rm ftp_storage ftp_user_data;
-  docker-compose -f ./infra/ftp/docker-compose.yml up -d --force-recreate;
+  docker-compose -f ./external/ftp/docker-compose.yml up -d --force-recreate;
   Write-Host 'Done.' -ForegroundColor Green;
 }
 

@@ -91,12 +91,12 @@ BEGIN
 	SELECT MAX(fp.id) INTO _nextParentId FROM public.fileparts fp WHERE fp.basefilename = _baseFileName;
 	
 	INSERT INTO public.fileparts (
-    	folder,
+    folder,
 		partname,
-    	compressionHash,
-    	encryptionHash,
+    compressionHash,
+    encryptionHash,
 		parentid,
-    	baseFileName,
+    baseFileName,
 		compressed,
 		creationtimestamp,
 		modificationtimestamp
@@ -125,7 +125,7 @@ $$;
 INSERT INTO public.user(accountuid, login, folder, creationtimestamp, modificationtimestamp)
 VALUES (uuid_generate_v4(), 'aaron', 'aaron', now(), now());
 
-INSERT INTO public.fileparts(folder, partname, hash, parentid, basefilename, creationtimestamp, modificationtimestamp)
+INSERT INTO public.fileparts(folder, partname, compressionHash, encryptionHash, parentid, basefilename, creationtimestamp, modificationtimestamp)
 VALUES
 	('aaron', 'firstPartName', '4752c38d26b83408af699cdf8841ac6c', '4752c38d26b83408af699cdf8841ac6c', NULL, 'filename.txt', now(), now()),
 	('aaron', 'secondPartName', 'f3bc96df7ff110b25feafc47ebc87bb6', 'f3bc96df7ff110b25feafc47ebc87bb6', 1, 'filename.txt', now(), now()),

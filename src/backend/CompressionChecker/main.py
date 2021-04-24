@@ -21,13 +21,6 @@ arg_parser = argparse.ArgumentParser()
 arg_parser.add_argument('environment', metavar='env', type=str, help='and environment identifier')
 args = arg_parser.parse_args()
 
-if args.environment != 'local':
-	seqlog.configure_from_file('secrets/logger_config.yml')
-seqlog.set_global_log_properties(
-	Application="CompressionChecker",
-	AssemblyVersion="0.0.0.1"
-)
-
 config = get_config(args.environment)
 
 log = logging.getLogger()
