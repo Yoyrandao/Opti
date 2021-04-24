@@ -20,7 +20,6 @@ namespace Tests
         {
             _sliceProcessor.Process(new FileSnapshot
             {
-                EncryptedPath = "./testfile.txt",
                 BaseFileName = "testfile.txt"
             });
         }

@@ -13,7 +13,9 @@ namespace CommonTypes.Contracts
         
         public bool IsFirst { get; init; }
 
-        public string Hash { get; init; }
+        public string CompressionHash { get; init; }
+        
+        public string EncryptionHash { get; init; }
 
         public bool Compressed { get; init; }
     }

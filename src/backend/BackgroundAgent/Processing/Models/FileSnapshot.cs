@@ -8,8 +8,6 @@ namespace BackgroundAgent.Processing.Models
 
         public string CompressedPath { get; set; }
 
-        public string EncryptedPath { get; set; }
-
         public string DecryptedPath { get; set; }
 
         public List<FilePart> Parts { get; set; }

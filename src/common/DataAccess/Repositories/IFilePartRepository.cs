@@ -14,7 +14,7 @@ namespace DataAccess.Repositories
 
         void AppendToFile(FilePart part);
 
-        void UpdateFilePart(string partName, string newHash);
+        void UpdateFilePart(string partName, string newCompressionHash, string newEncryptionHash);
 
         FilePart GetById(int id);
 

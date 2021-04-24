@@ -29,7 +29,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var decryptionKey = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionKey));
             var iv = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionIv));
 
-            var content = File.ReadAllBytes(snapshot.EncryptedPath);
+            var content = File.ReadAllBytes("// I DONT KNOW");
             var decryptedContent = _aesCryptoService.Decrypt(decryptionKey, iv, content);
 
             var decryptedFileLocation =

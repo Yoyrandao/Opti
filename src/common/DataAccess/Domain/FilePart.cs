@@ -11,7 +11,9 @@ namespace DataAccess.Domain
 
         public string BaseFileName { get; init; }
 
-        public string Hash { get; init; }
+        public string CompressionHash { get; init; }
+        
+        public string EncryptionHash { get; init; }
 
         public int? ParentId { get; init; }
 

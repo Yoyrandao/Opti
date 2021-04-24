@@ -8,15 +8,18 @@ using EnsureThat;
 
 using Serilog;
 
+using Utils.Hashing;
+
 namespace BackgroundAgent.Processing.Tasks.Processors
 {
     public class EncryptionProcessor : BasicProcessor
     {
         public EncryptionProcessor(IAsymmetricalCryptoService rsaCryptoService,
-                                   ISymmentricalCryptoService aesCryptoService)
+                                   ISymmentricalCryptoService aesCryptoService, IHashProvider hashProvider)
         {
             _rsaCryptoService = rsaCryptoService;
             _aesCryptoService = aesCryptoService;
+            _hashProvider = hashProvider;
         }
 
         public override void Process(object contract)
@@ -29,23 +32,28 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var encryptionKey = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionKey));
             var iv = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionIv));
 
-            var content = File.ReadAllBytes(snapshot.Compressed ? snapshot.CompressedPath : snapshot.Path);
-            var encryptedContent = _aesCryptoService.Encrypt(encryptionKey, iv, content);
-
-            var encryptedFileLocation =
-                Path.Combine(FsLocation.ApplicationTempData, snapshot.BaseFileName + ".encrypted");
-
-            File.WriteAllBytes(encryptedFileLocation, encryptedContent);
+            foreach (var part in snapshot.Parts)
+            {
+                var content = File.ReadAllBytes(part.Path);
+                var encryptedContent = _aesCryptoService.Encrypt(encryptionKey, iv, content);
+                
+                var encryptedFileLocation =
+                    Path.Combine(FsLocation.ApplicationTempData, part.Path + ".encrypted");
+                
+                File.WriteAllBytes(encryptedFileLocation, encryptedContent);
+                File.Delete(part.Path);
+                
+                part.Path = encryptedFileLocation;
+                part.EncryptionHash = _hashProvider.Hash(File.ReadAllText(encryptedFileLocation));
+            }
             
-            if (snapshot.Compressed && File.Exists(snapshot.CompressedPath))
-                File.Delete(snapshot.CompressedPath);
-            
-            snapshot.EncryptedPath = encryptedFileLocation;
             Successor?.Process(snapshot);
         }
 
         private readonly IAsymmetricalCryptoService _rsaCryptoService;
         private readonly ISymmentricalCryptoService _aesCryptoService;
+
+        private readonly IHashProvider _hashProvider;
 
         private readonly ILogger _logger = Log.ForContext<EncryptionProcessor>();
     }

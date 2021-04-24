@@ -30,7 +30,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             
             _logger.Information($"Running slicing process for {snapshot.BaseFileName}");
 
-            var fileToSliceLocation = snapshot.EncryptedPath;
+            var fileToSliceLocation = snapshot.Compressed ? snapshot.CompressedPath : snapshot.Path;
             var buffer = new byte[BUFFER_SIZE];
 
             using (var source = File.OpenRead(fileToSliceLocation))
@@ -60,7 +60,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                         IsFirst = index == 0,
                         Path = partPath,
                         PartName = partName,
-                        Hash = _hashProvider.Hash(File.ReadAllText(partPath))
+                        CompressionHash = _hashProvider.Hash(File.ReadAllText(partPath))
                     });
 
                     index++;
@@ -68,7 +68,9 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                 }
             }
             
-            File.Delete(fileToSliceLocation);
+            if (snapshot.Compressed && File.Exists(fileToSliceLocation))
+                File.Delete(fileToSliceLocation);
+            
             Successor?.Process(snapshot);
         }
 

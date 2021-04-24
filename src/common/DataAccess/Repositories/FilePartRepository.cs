@@ -26,7 +26,7 @@ namespace DataAccess.Repositories
         public int AddAndReturnId(FilePart part)
         {
             const string query =
-                @"SELECT * FROM public.addFilePart(@FileName, @Base, @Folder, @Hash, @ParentId, @Compressed)";
+                @"SELECT * FROM public.addFilePart(@FileName, @Base, @Folder, @CompressionHash, @EncryptionHash, @ParentId, @Compressed)";
 
             return _executor.Get<int>(query,
                 new
@@ -34,7 +34,8 @@ namespace DataAccess.Repositories
                     FileName = part.PartName,
                     Base = part.BaseFileName,
                     part.Folder,
-                    part.Hash,
+                    part.CompressionHash,
+                    part.EncryptionHash,
                     part.ParentId,
                     part.Compressed
                 });
@@ -43,7 +44,7 @@ namespace DataAccess.Repositories
         public void Add(FilePart part)
         {
             const string query =
-                @"SELECT * FROM public.addFilePart(@FileName, @Base, @Folder, @Hash, @ParentId, @Compressed)";
+                @"SELECT * FROM public.addFilePart(@FileName, @Base, @Folder, @CompressionHash, @EncryptionHash, @ParentId, @Compressed)";
 
             _executor.Get<int>(query,
                 new
@@ -51,7 +52,8 @@ namespace DataAccess.Repositories
                     FileName = part.PartName,
                     Base = part.BaseFileName,
                     part.Folder,
-                    part.Hash,
+                    part.CompressionHash,
+                    part.EncryptionHash,
                     part.ParentId,
                     part.Compressed
                 });
@@ -59,26 +61,28 @@ namespace DataAccess.Repositories
 
         public void AppendToFile(FilePart part)
         {
-            const string query = @"CALL public.appendfilepart(@FileName, @Base, @Folder, @Hash, @Compressed)";
+            const string query = @"CALL public.appendfilepart(@FileName, @Base, @Folder, @CompressionHash, @EncryptionHash, @Compressed)";
             
             _executor.Execute(query, new
             {
                 FileName = part.PartName,
                 Base = part.BaseFileName,
                 part.Folder,
-                part.Hash,
+                part.CompressionHash,
+                part.EncryptionHash,
                 part.Compressed
             });
         }
 
-        public void UpdateFilePart(string partName, string newHash)
+        public void UpdateFilePart(string partName, string newCompressionHash, string newEncryptionHash)
         {
-            const string query = @"CALL public.updateFilePart(@FileName, @Hash)";
+            const string query = @"CALL public.updateFilePart(@FileName, @CompressionHash, @EncryptionHash)";
             
             _executor.Execute(query, new
             {
                 FileName = partName,
-                Hash = newHash
+                CompressionHash = newCompressionHash,
+                EncryptionHash = newEncryptionHash
             });
         }
 
@@ -89,6 +93,8 @@ namespace DataAccess.Repositories
                                           fp.partName,
                                           fp.parentId,
                                           fp.baseFileName,
+                                          fp.compressionHash,
+                                          fp.encryptionHash,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -121,7 +127,8 @@ namespace DataAccess.Repositories
                                           fp.partName,
                                           fp.parentId,
                                           fp.baseFileName,
-                                          fp.hash,
+                                          fp.compressionHash,
+                                          fp.encryptionHash,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -138,6 +145,8 @@ namespace DataAccess.Repositories
                                           fp.partName,
                                           fp.parentId,
                                           fp.baseFileName,
+                                          fp.compressionHash,
+                                          fp.encryptionHash,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -153,6 +162,8 @@ namespace DataAccess.Repositories
                                           fp.partName,
                                           fp.parentId,
                                           fp.baseFileName,
+                                          fp.compressionHash,
+                                          fp.encryptionHash,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp
@@ -169,7 +180,8 @@ namespace DataAccess.Repositories
                                           fp.partName,
                                           fp.parentId,
                                           fp.baseFileName,
-                                          fp.hash,
+                                          fp.compressionHash,
+                                          fp.encryptionHash,
                                           fp.compressed,
                                           fp.creationTimestamp,
                                           fp.modificationTimestamp

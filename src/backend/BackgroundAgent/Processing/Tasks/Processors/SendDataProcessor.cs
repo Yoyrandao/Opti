@@ -38,10 +38,11 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
                     return new Change
                     {
-                        Hash = x.Hash,
                         IsFirst = x.IsFirst,
                         PartName = x.PartName,
                         Compressed = snapshot.Compressed,
+                        EncryptionHash = x.EncryptionHash,
+                        CompressionHash = x.CompressionHash,
                         BaseFileName = snapshot.BaseFileName,
                         Base64Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(partContent))
                     };

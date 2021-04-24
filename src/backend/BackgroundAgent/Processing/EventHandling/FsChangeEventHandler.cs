@@ -2,6 +2,7 @@
 
 using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Processing.Services;
+using BackgroundAgent.Processing.Tasks;
 
 using CommonTypes.Programmability;
 
@@ -11,9 +12,9 @@ namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsChangeEventHandler : IFsChangeEventHandler
     {
-        public FsChangeEventHandler(ICompressionCheckService service)
+        public FsChangeEventHandler(ChangedFileOperationTask task)
         {
-            _service = service;
+            _task = task;
             _changeQueue = new QueueSet<FsEvent>();
             _changeQueue.OnPush += ProcessInternal;
         }
@@ -31,11 +32,19 @@ namespace BackgroundAgent.Processing.EventHandling
 
         #endregion
 
-        private void ProcessInternal() { }
+        private void ProcessInternal()
+        {
+            var file = _changeQueue.Pop();
+
+            if (file == null)
+                return;
+            
+            // _task.Process(file.FilePath);
+        }
 
         private volatile QueueSet<FsEvent> _changeQueue;
-        private readonly ICompressionCheckService _service;
-        
+        private readonly ChangedFileOperationTask _task;
+
         private readonly ILogger _logger = Log.ForContext<FsChangeEventHandler>();
     }
 }

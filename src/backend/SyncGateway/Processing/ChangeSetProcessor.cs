@@ -66,7 +66,7 @@ namespace SyncGateway.Processing
                     else
                     {
                         _folderRepository.RemoveFile(record.PartName, data.Identity);
-                        _filePartRepository.UpdateFilePart(record.PartName, record.Hash);
+                        _filePartRepository.UpdateFilePart(record.PartName, record.CompressionHash, record.EncryptionHash);
                     }
 
                     _folderRepository.UploadFile(memoryStream, record.PartName, data.Identity);
