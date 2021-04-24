@@ -15,7 +15,6 @@ namespace Tests
         [Test]
         public void EntopyTest()
         {
-            _entropyCalculator.Calculate("./testfile.txt");
         }
 
         private IFileEntropyCalculator _entropyCalculator;

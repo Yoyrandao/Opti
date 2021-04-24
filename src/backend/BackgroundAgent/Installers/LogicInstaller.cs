@@ -61,8 +61,9 @@ namespace BackgroundAgent.Installers
                     x.GetService<MetaInfoProcessor>(),
                     x.GetService<CompressionCheckProcessor>(),
                     x.GetService<CompressionProcessor>(),
-                    x.GetService<EncryptionProcessor>(),
                     x.GetService<SliceProcessor>(),
+                    x.GetService<DistinctProcessor>(),
+                    x.GetService<EncryptionProcessor>(),
                     x.GetService<SendDataProcessor>()
                 }));
 
@@ -80,6 +81,9 @@ namespace BackgroundAgent.Installers
             services.AddTransient<SliceProcessor>();
 
             services.AddTransient(x => new SendDataProcessor(
+                x.GetService<IRequestFactory>(),
+                x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway)));
+            services.AddTransient(x => new DistinctProcessor(
                 x.GetService<IRequestFactory>(),
                 x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway)));
         }

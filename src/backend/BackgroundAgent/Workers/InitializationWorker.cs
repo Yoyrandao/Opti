@@ -56,8 +56,8 @@ namespace BackgroundAgent.Workers
         {
             _fsWatcher.Path = FsLocation.ApplicationData;
 
-            // _fsWatcher.Changed += _changeEventHandler.OnChanged;
-            _fsWatcher.Created += _createEventHandler.OnCreated;
+            _fsWatcher.Changed += _changeEventHandler.OnChanged;
+            // _fsWatcher.Created += _createEventHandler.OnCreated;
             // _fsWatcher.Deleted += _deleteEventHandler.OnDeleted;
 
             _fsWatcher.EnableRaisingEvents = true;

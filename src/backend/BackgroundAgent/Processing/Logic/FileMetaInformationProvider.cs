@@ -16,13 +16,14 @@ namespace BackgroundAgent.Processing.Logic
         public FileMetaInfo GetInformation(string path)
         {
             var fileInfo = new FileInfo(path);
+            using var stream = fileInfo.OpenRead();
 
             return new FileMetaInfo
             {
                 FileName = fileInfo.Name,
                 FileSize = fileInfo.Length,
                 FileType = fileInfo.Extension.ToLower(CultureInfo.InvariantCulture),
-                FileEntropy = _entropyCalculator.Calculate(path)
+                FileEntropy = _entropyCalculator.Calculate(stream)
             };
         }
 

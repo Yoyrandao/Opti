@@ -28,6 +28,9 @@ namespace BackgroundAgent.Processing.Tasks.Processors
         {
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
+            
+            if (snapshot.Parts.Count == 0)
+                Successor?.Process(snapshot);
 
             var changeSet = new ChangeSet
             {
@@ -51,6 +54,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             var request = _requestFactory.CreateChangeSetSendingRequest(changeSet);
             _client.Execute(request);
+            
+            Successor?.Process(snapshot);
         }
 
         private readonly IRestClient _client;

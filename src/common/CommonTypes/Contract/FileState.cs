@@ -1,11 +1,10 @@
-﻿using System;
-
-namespace BackgroundAgent.Contracts
+﻿namespace CommonTypes.Contracts
 {
-    [Serializable]
     public record FileState
     {
-        public string Hash { get; init; }
+        public string CompressionHash { get; init; }
+        
+        public string EncryptionHash { get; init; }
 
         public int ParentId { get; init; }
 

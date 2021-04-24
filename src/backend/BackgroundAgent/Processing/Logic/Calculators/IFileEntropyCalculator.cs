@@ -1,7 +1,9 @@
-﻿namespace BackgroundAgent.Processing.Logic.Calculators
+﻿using System.IO;
+
+namespace BackgroundAgent.Processing.Logic.Calculators
 {
     public interface IFileEntropyCalculator
     {
-        double Calculate(string path);
+        double Calculate(FileStream stream);
     }
 }

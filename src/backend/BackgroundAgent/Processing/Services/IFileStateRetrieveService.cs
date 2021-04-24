@@ -3,6 +3,8 @@
 using BackgroundAgent.Contracts;
 using BackgroundAgent.Processing.Models;
 
+using CommonTypes.Contracts;
+
 namespace BackgroundAgent.Processing.Services
 {
     public interface IFileStateRetrieveService

@@ -2,6 +2,8 @@
 
 using AutoMapper;
 
+using CommonTypes.Contracts;
+
 using DataAccess.Repositories;
 
 using Microsoft.AspNetCore.Http;
@@ -9,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 
 using Serilog;
 
-using SyncGateway.Contracts.Out;
 using SyncGateway.Exceptions.Shields;
 using SyncGateway.Helpers;
 

@@ -4,6 +4,8 @@ using BackgroundAgent.Contracts;
 using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Requests;
 
+using CommonTypes.Contracts;
+
 using RestSharp;
 
 using Serilog;

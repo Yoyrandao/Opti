@@ -39,7 +39,7 @@ namespace BackgroundAgent.Processing.EventHandling
             if (file == null)
                 return;
             
-            // _task.Process(file.FilePath);
+            _task.Process(file.FilePath);
         }
 
         private volatile QueueSet<FsEvent> _changeQueue;

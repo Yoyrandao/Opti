@@ -8,21 +8,35 @@ namespace BackgroundAgent.Processing.Logic.Calculators
 {
     public class FileEntropyCalculator : IFileEntropyCalculator
     {
-        public double Calculate(string path)
+        public double Calculate(FileStream stream)
         {
-            Ensure.NotNull(path, nameof(path));
-            
-            var fileContent = File.ReadAllBytes(path);
+            byte[] buffer;
+            try
+            {
+                var length = (int) stream.Length;
+                var sum = 0;
 
-            if (fileContent.Length == 0)
+                int count;
+
+                buffer = new byte[length];
+
+                while ((count = stream.Read(buffer, sum, length - sum)) > 0)
+                    sum += count;
+            }
+            finally
+            {
+                stream.Close();
+            }
+
+            if (buffer.Length == 0)
             {
                 return 0;
             }
             
-            var map = fileContent.GroupBy(b => b).Select(b => new
+            var map = buffer.GroupBy(b => b).Select(b => new
             {
                 Value = b.Key,
-                Probability = (double)fileContent.LongCount(x => x == b.Key) / (double)fileContent.Length
+                Probability = (double)buffer.LongCount(x => x == b.Key) / (double)buffer.Length
             });
             var entropy = -1 * map.Select(e => e.Probability * Math.Log(e.Probability)).Sum();
 
