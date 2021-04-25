@@ -19,13 +19,13 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             if (!snapshot.Compressed)
             {
-                _logger.Information($"Skipping decompression process for {snapshot.BaseFileName}");
+                _logger.Information($"Skipping decompression process for {snapshot.BaseFileName}.");
                 Successor?.Process(snapshot);
 
                 return;
             }
 
-            _logger.Information($"Running decompression process for {snapshot.BaseFileName}");
+            _logger.Information($"Running decompression process for {snapshot.BaseFileName}.");
 
             var decompressedFileLocation =
                 Path.Combine(FsLocation.ApplicationTempData, snapshot.BaseFileName + ".decompressed");
@@ -42,6 +42,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                     }
                 }
             }
+            
+            _logger.Information($"Decompression process complete ({snapshot.BaseFileName}).");
 
             Successor?.Process(snapshot);
         }

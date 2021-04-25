@@ -28,7 +28,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             snapshot.Parts = new List<FilePart>();
             
-            _logger.Information($"Running slicing process for {snapshot.BaseFileName}");
+            _logger.Information($"Running slicing process for {snapshot.BaseFileName}.");
 
             var fileToSliceLocation = snapshot.Compressed ? snapshot.CompressedPath : snapshot.Path;
             var buffer = new byte[BUFFER_SIZE];
@@ -70,6 +70,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             
             if (snapshot.Compressed && File.Exists(fileToSliceLocation))
                 File.Delete(fileToSliceLocation);
+            
+            _logger.Information($"Slicing process complete ({snapshot.BaseFileName}).");
             
             Successor?.Process(snapshot);
         }

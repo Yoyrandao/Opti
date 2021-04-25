@@ -19,11 +19,13 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
             
-            _logger.Information($"Running compression check process for {snapshot.BaseFileName}");
+            _logger.Information($"Running compression check process for {snapshot.BaseFileName}.");
 
             var decision = _compressionCheckService.Check(snapshot.MetaInfo);
             snapshot.Compressed = decision;
-            
+
+            _logger.Information($"Сompression check process completed. ({snapshot.BaseFileName}).");
+
             Successor?.Process(snapshot);
         }
 

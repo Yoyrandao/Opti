@@ -1,17 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Processing.Services;
-using BackgroundAgent.Requests;
-
-using CommonTypes.Contracts;
 
 using EnsureThat;
 
-using RestSharp;
-
-using Utils.Http;
+using Serilog;
 
 namespace BackgroundAgent.Processing.Tasks.Processors
 {
@@ -26,6 +20,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
         {
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
+            
+            _logger.Information($"Running distinction process for {snapshot.BaseFileName}.");
 
             var fileStateMap = _fileStateService.GetStateOf(snapshot.BaseFileName)
                .ToDictionary(fs => fs.PartName, fs => fs);
@@ -34,9 +30,13 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                .Where(p => !fileStateMap.ContainsKey(p.PartName)
                            || !fileStateMap[p.PartName].CompressionHash.Equals(p.CompressionHash)).ToList();
             
+            _logger.Information($"Distinction process complete ({snapshot.BaseFileName}).");
+
             Successor?.Process(snapshot);
         }
 
         private readonly IFileStateService _fileStateService;
+        
+        private readonly ILogger _logger = Log.ForContext<DistinctProcessor>();
     }
 }

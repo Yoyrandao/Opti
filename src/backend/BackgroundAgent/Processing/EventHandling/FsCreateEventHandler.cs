@@ -25,7 +25,6 @@ namespace BackgroundAgent.Processing.EventHandling
             if (ea.ChangeType != WatcherChangeTypes.Created)
                 return;
 
-            _logger.Information($"Processing file creation ({ea.FullPath}).");
             _createQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name });
         }
 
@@ -38,6 +37,7 @@ namespace BackgroundAgent.Processing.EventHandling
             if (file == null)
                 return;
             
+            _logger.Information($"Processing file creation ({file.FilePath}).");
             _task.Process(file.FilePath);
         }
 

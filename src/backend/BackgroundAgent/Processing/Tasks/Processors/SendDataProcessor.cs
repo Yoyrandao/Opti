@@ -12,6 +12,8 @@ using EnsureThat;
 
 using RestSharp;
 
+using Serilog;
+
 using Utils.Http;
 
 namespace BackgroundAgent.Processing.Tasks.Processors
@@ -32,6 +34,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             if (snapshot.Parts.Count == 0)
                 Successor?.Process(snapshot);
 
+            _logger.Information($"Running sending data process for {snapshot.BaseFileName}.");
+            
             var changeSet = new ChangeSet
             {
                 Identity = "aaron",
@@ -55,10 +59,14 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var request = _requestFactory.CreateChangeSetSendingRequest(changeSet);
             _client.Execute(request);
             
+            _logger.Information($"Sending data process complete ({snapshot.BaseFileName}).");
+
             Successor?.Process(snapshot);
         }
 
         private readonly IRestClient _client;
         private readonly IRequestFactory _requestFactory;
+
+        private ILogger _logger = Log.ForContext<SendDataProcessor>();
     }
 }

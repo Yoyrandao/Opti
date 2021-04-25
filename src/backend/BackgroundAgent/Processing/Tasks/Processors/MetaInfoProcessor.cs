@@ -19,7 +19,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var path = contract as string;
             EnsureArg.IsNotNull(path);
 
-            _logger.Information($"Running info gathering process for {path}");
+            _logger.Information($"Running info gathering process for {path}.");
 
             var fileMetaInfo = _infoGatherService.Gather(path);
 
@@ -29,6 +29,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                 MetaInfo = fileMetaInfo,
                 BaseFileName = fileMetaInfo.FileName
             };
+            
+            _logger.Information($"Info gathering process complete ({path}).");
 
             Successor?.Process(snapshot);
         }

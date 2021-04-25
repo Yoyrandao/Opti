@@ -1,4 +1,6 @@
-﻿using CommonTypes.Contracts;
+﻿using System.Threading.Tasks;
+
+using CommonTypes.Contracts;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +19,14 @@ namespace SyncGateway.Controllers
     [ApiController]
     public class UpdateController : Controller
     {
-        public UpdateController(IUpdateUserStorageService updateUserStorageService, IExceptionShield<ApiResponse> shield)
+        public UpdateController(
+            IUpdateUserStorageService updateUserStorageService,
+            IExceptionShield<ApiResponse> shield)
         {
             _shield = shield;
             _updateUserStorageService = updateUserStorageService;
         }
-        
+
         [HttpPost]
         [Route(Routes.Fs.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -33,14 +37,14 @@ namespace SyncGateway.Controllers
             var result = _shield.Protect(() =>
             {
                 _logger.Information($"Updating user FS triggered for {changeSet.Identity}.");
-                
-                _updateUserStorageService.Update(changeSet);
-                
-                _logger.Information($"Successfully updated ({changeSet.Identity}).");
+
+                Task.Run(() => _updateUserStorageService.Update(changeSet)).ContinueWith(
+                    (_, state) => { (state as ILogger)?.Information($"Successfully updated ({changeSet.Identity})."); },
+                    _logger);
 
                 return new ApiResponse { Data = new Result { Success = true } };
             });
-            
+
             return result.Error == null ? Ok(result) : BadRequest(result);
         }
 

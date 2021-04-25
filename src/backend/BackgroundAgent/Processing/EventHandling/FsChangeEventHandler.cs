@@ -1,7 +1,6 @@
 ﻿using System.IO;
 
 using BackgroundAgent.Processing.Models;
-using BackgroundAgent.Processing.Services;
 using BackgroundAgent.Processing.Tasks;
 
 using CommonTypes.Programmability;
@@ -26,7 +25,6 @@ namespace BackgroundAgent.Processing.EventHandling
             if (ea.ChangeType != WatcherChangeTypes.Changed)
                 return;
 
-            _logger.Information($"Processing file changing ({ea.FullPath}).");
             _changeQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name });
         }
 
@@ -39,6 +37,7 @@ namespace BackgroundAgent.Processing.EventHandling
             if (file == null)
                 return;
             
+            _logger.Information($"Processing file changing ({file.FilePath}).");
             _task.Process(file.FilePath);
         }
 

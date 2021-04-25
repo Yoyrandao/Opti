@@ -26,8 +26,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
         {
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
-            
-            _logger.Information($"Running encryption process for {snapshot.BaseFileName}");
+
+            _logger.Information($"Running encryption process for {snapshot.BaseFileName}.");
 
             var encryptionKey = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionKey));
             var iv = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionIv));
@@ -36,17 +36,19 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             {
                 var content = File.ReadAllBytes(part.Path);
                 var encryptedContent = _aesCryptoService.Encrypt(encryptionKey, iv, content);
-                
+
                 var encryptedFileLocation =
                     Path.Combine(FsLocation.ApplicationTempData, part.Path + ".encrypted");
-                
+
                 File.WriteAllBytes(encryptedFileLocation, encryptedContent);
                 File.Delete(part.Path);
-                
+
                 part.Path = encryptedFileLocation;
                 part.EncryptionHash = _hashProvider.Hash(File.ReadAllText(encryptedFileLocation));
             }
-            
+
+            _logger.Information($"Encryption process complete ({snapshot.BaseFileName}).");
+
             Successor?.Process(snapshot);
         }
 

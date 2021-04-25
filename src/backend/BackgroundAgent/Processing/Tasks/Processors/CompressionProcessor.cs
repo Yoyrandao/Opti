@@ -19,13 +19,13 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             if (!snapshot.Compressed)
             {
-                _logger.Information($"Skipping compression process for {snapshot.BaseFileName}");
+                _logger.Information($"Skipping compression process for {snapshot.BaseFileName}.");
                 Successor?.Process(snapshot);
 
                 return;
             }
             
-            _logger.Information($"Running compression process for {snapshot.BaseFileName}");
+            _logger.Information($"Running compression process for {snapshot.BaseFileName}.");
 
             var compressedFileLocation = Path.Combine(FsLocation.ApplicationTempData, snapshot.BaseFileName + ".compressed");
             var fileInfo = new FileInfo(snapshot.Path);
@@ -40,6 +40,8 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                     }
                 }
             }
+            
+            _logger.Information($"Compression process complete ({snapshot.BaseFileName}).");
 
             snapshot.CompressedPath = compressedFileLocation;
             Successor?.Process(snapshot);

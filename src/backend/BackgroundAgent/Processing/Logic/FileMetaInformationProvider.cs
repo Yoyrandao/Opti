@@ -17,8 +17,8 @@ namespace BackgroundAgent.Processing.Logic
         public FileMetaInfo GetInformation(string path)
         {
             var fileInfo = new FileInfo(path);
-            Thread.Sleep(1000);
-            using var stream = fileInfo.OpenRead();
+            
+            using var stream = fileInfo.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
 
             return new FileMetaInfo
             {
