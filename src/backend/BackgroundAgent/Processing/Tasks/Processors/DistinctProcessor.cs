@@ -2,6 +2,7 @@
 using System.Linq;
 
 using BackgroundAgent.Processing.Models;
+using BackgroundAgent.Processing.Services;
 using BackgroundAgent.Requests;
 
 using CommonTypes.Contracts;
@@ -16,10 +17,9 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 {
     public class DistinctProcessor : BasicProcessor
     {
-        public DistinctProcessor(IRequestFactory requestFactory, IRestClientFactory factory)
+        public DistinctProcessor(IFileStateService fileStateService)
         {
-            _client = factory.Create();
-            _requestFactory = requestFactory;
+            _fileStateService = fileStateService;
         }
 
         public override void Process(object contract)
@@ -27,10 +27,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
 
-            var request = _requestFactory.CreateGetFileStateRequest(snapshot.BaseFileName);
-
-            var fileStateMap = _client
-               .Execute<IEnumerable<FileState>>(request).Data
+            var fileStateMap = _fileStateService.GetStateOf(snapshot.BaseFileName)
                .ToDictionary(fs => fs.PartName, fs => fs);
 
             snapshot.Parts = snapshot.Parts
@@ -40,7 +37,6 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             Successor?.Process(snapshot);
         }
 
-        private readonly IRequestFactory _requestFactory;
-        private readonly IRestClient _client;
+        private readonly IFileStateService _fileStateService;
     }
 }

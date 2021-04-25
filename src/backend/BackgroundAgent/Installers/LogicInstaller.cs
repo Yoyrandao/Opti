@@ -11,6 +11,7 @@ using BackgroundAgent.Requests;
 using Microsoft.Extensions.DependencyInjection;
 
 using Utils.Http;
+using Utils.Serialization;
 
 namespace BackgroundAgent.Installers
 {
@@ -19,6 +20,8 @@ namespace BackgroundAgent.Installers
         public static IServiceCollection InstallLogic(this IServiceCollection services)
         {
             InstallProcessors(services);
+
+            services.AddTransient<ISerializer, JsonSerializer>();
 
             services.AddTransient<ISymmentricalCryptoService, SymmetricalCryptoService>();
             services.AddTransient<IAsymmetricalCryptoService, AssymentricalCryptoService>();
@@ -34,10 +37,11 @@ namespace BackgroundAgent.Installers
 
             services.AddTransient<IMetaInfoGatherService, MetaInfoGatherService>();
 
-            services.AddTransient<IFileStateRetrieveService, FileStateRetrieveService>(
-                x => new FileStateRetrieveService(
+            services.AddTransient<IFileStateService, FileStateService>(
+                x => new FileStateService(
+                    x.GetService<IRequestFactory>(),
                     x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway),
-                    x.GetService<IRequestFactory>()));
+                    x.GetService<ISerializer>()));
 
             services.AddTransient<ICompressionCheckService, CompressionCheckService>(
                 x => new CompressionCheckService(
@@ -54,7 +58,7 @@ namespace BackgroundAgent.Installers
                     x.GetService<EncryptionProcessor>(),
                     x.GetService<SendDataProcessor>()
                 }));
-            
+
             services.AddTransient(
                 x => new ChangedFileOperationTask(new BasicProcessor[]
                 {
@@ -78,12 +82,10 @@ namespace BackgroundAgent.Installers
             services.AddTransient<DecompressionProcessor>();
             services.AddTransient<EncryptionProcessor>();
             services.AddTransient<DecryptionProcessor>();
+            services.AddTransient<DistinctProcessor>();
             services.AddTransient<SliceProcessor>();
 
             services.AddTransient(x => new SendDataProcessor(
-                x.GetService<IRequestFactory>(),
-                x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway)));
-            services.AddTransient(x => new DistinctProcessor(
                 x.GetService<IRequestFactory>(),
                 x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway)));
         }

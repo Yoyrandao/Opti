@@ -27,7 +27,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             var snapshot = contract as FileSnapshot;
             EnsureArg.IsNotNull(snapshot);
             
-            _logger.Information($"Running decryption process for {snapshot.BaseFileName}");
+            _logger.Information($"Running encryption process for {snapshot.BaseFileName}");
 
             var encryptionKey = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionKey));
             var iv = _rsaCryptoService.Decrypt(File.ReadAllBytes(FsLocation.ApplicationEncryptionIv));

@@ -40,7 +40,10 @@ namespace SyncGateway.Controllers
             {
                 _logger.Information($"Retrieving infromation about file ({filename}).");
 
-                var fileState = _filePartRepository.GetFileByName(filename).Select(fp => _mapper.Map<FileState>(fp));
+                var fileState = _filePartRepository
+                   .GetFileByName(filename)
+                   .Select(fp => _mapper.Map<FileState>(fp))
+                   .ToList();
 
                 return new ApiResponse { Data = fileState };
             });
