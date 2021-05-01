@@ -3,6 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+# Python ml model creating
 src/tools/dataset_creator/sources/
 src/tools/dataset_creator/sources/images/
 src/tools/dataset_creator/test/
@@ -13,10 +14,17 @@ src/tools/dataset_creator/sources/images/*.jpg
 *.csv
 tree.png
 
+
+# Docker-compose env variables
 *.list
 
+# Dotnet configuration files
 appsettings.*.json
 *_config.yml
+
+# Specific values
+certificates/*
+*.enc
 
 # User-specific files
 *.rsuser

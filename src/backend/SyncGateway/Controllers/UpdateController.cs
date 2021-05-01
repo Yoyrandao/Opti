@@ -62,13 +62,12 @@ namespace SyncGateway.Controllers
             {
                 _logger.Information($"Deleting entity from FS for {deleteSet.Identity}");
 
-                // Task.Run(() => _updateUserStorageService.Delete(deleteSet)).ContinueWith(
-                //     (_, state) =>
-                //     {
-                //         (state as ILogger)?.Information(
-                //             $"Successfully deleted {deleteSet.Filename} ({deleteSet.Identity})");
-                //     }, _logger);
-                _updateUserStorageService.Delete(deleteSet);
+                Task.Run(() => _updateUserStorageService.Delete(deleteSet)).ContinueWith(
+                    (_, state) =>
+                    {
+                        (state as ILogger)?.Information(
+                            $"Successfully deleted {deleteSet.Filename} ({deleteSet.Identity})");
+                    }, _logger);
 
                 return new ApiResponse { Data = new Result { Success = true } };
             });

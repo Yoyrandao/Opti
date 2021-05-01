@@ -1,3 +1,7 @@
+using System;
+using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +42,24 @@ namespace SyncGateway
             services.AddHealthChecks()
                .AddCheck<HealthCheckService>("Liveness");
 
+            services.AddAuthentication(CertificateAuthenticationDefaults.AuthenticationScheme)
+               .AddCertificate(options =>
+                {
+                    options.AllowedCertificateTypes = CertificateTypes.All;
+
+                    options.Events = new CertificateAuthenticationEvents
+                    {
+                        OnCertificateValidated = context =>
+                        {
+                            // TODO: Figure out wtf is going on here and why i need this
+                            var certificate = context.ClientCertificate;
+
+                            context.Success();
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
             services.AddSwaggerGen(c =>
@@ -58,6 +80,7 @@ namespace SyncGateway
             }
 
             app.UseRouting();
+            app.UseHttpsRedirection();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/health/startup");
