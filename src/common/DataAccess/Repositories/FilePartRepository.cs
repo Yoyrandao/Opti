@@ -86,6 +86,16 @@ namespace DataAccess.Repositories
             });
         }
 
+        public void DeleteFile(string filename)
+        {
+            const string query = @"CALL public.deleteFile(@FileName)";
+            
+            _executor.Execute(query, new
+            {
+                FileName = filename
+            });
+        }
+
         public FilePart GetById(int id)
         {
             const string query = @"SELECT fp.id,

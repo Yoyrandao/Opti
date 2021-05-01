@@ -20,7 +20,7 @@ namespace SyncGateway.Controllers
     public class UpdateController : Controller
     {
         public UpdateController(
-            IUpdateUserStorageService updateUserStorageService,
+            IUpdateUserStorageService     updateUserStorageService,
             IExceptionShield<ApiResponse> shield)
         {
             _shield = shield;
@@ -39,8 +39,36 @@ namespace SyncGateway.Controllers
                 _logger.Information($"Updating user FS triggered for {changeSet.Identity}.");
 
                 Task.Run(() => _updateUserStorageService.Update(changeSet)).ContinueWith(
-                    (_, state) => { (state as ILogger)?.Information($"Successfully updated ({changeSet.Identity})."); },
-                    _logger);
+                    (_, state) =>
+                    {
+                        (state as ILogger)?.Information(
+                            $"Successfully updated ({changeSet.Identity}).");
+                    }, _logger);
+
+                return new ApiResponse { Data = new Result { Success = true } };
+            });
+
+            return result.Error == null ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpPost]
+        [Route(Routes.Fs.Delete)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public IActionResult Delete([FromBody] DeleteSet deleteSet)
+        {
+            var result = _shield.Protect(() =>
+            {
+                _logger.Information($"Deleting entity from FS for {deleteSet.Identity}");
+
+                // Task.Run(() => _updateUserStorageService.Delete(deleteSet)).ContinueWith(
+                //     (_, state) =>
+                //     {
+                //         (state as ILogger)?.Information(
+                //             $"Successfully deleted {deleteSet.Filename} ({deleteSet.Identity})");
+                //     }, _logger);
+                _updateUserStorageService.Delete(deleteSet);
 
                 return new ApiResponse { Data = new Result { Success = true } };
             });

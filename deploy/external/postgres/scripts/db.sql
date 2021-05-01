@@ -120,6 +120,15 @@ END
 $$;
 
 
+CREATE PROCEDURE deleteFile(
+	_baseFilename VARCHAR(255)
+) LANGUAGE plpgsql AS $$
+BEGIN
+	DELETE FROM public.fileparts fp WHERE fp.basefilename = _baseFilename;
+END
+$$;
+
+
 --DATA
 
 INSERT INTO public.user(accountuid, login, folder, creationtimestamp, modificationtimestamp)

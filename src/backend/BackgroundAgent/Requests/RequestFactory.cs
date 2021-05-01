@@ -46,6 +46,18 @@ namespace BackgroundAgent.Requests
             return request;
         }
 
+        public IRestRequest CreateDeleteSetSendingRequest(DeleteSet deleteSet)
+        {
+            var request = new RestRequest(Method.POST)
+            {
+                Resource = Routes.Delete
+            };
+
+            request.AddJsonBody(deleteSet);
+
+            return request;
+        }
+
         #endregion
     }
 }

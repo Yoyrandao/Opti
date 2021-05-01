@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using BackgroundAgent.Constants;
 using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Requests;
 
@@ -38,7 +39,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
             
             var changeSet = new ChangeSet
             {
-                Identity = "aaron",
+                Identity = User.TempIdentity,
                 Records = snapshot.Parts.Select(x =>
                 {
                     var partContent = File.ReadAllText(x.Path);

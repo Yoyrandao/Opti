@@ -49,7 +49,7 @@ namespace BackgroundAgent.Installers
                     x.GetService<IRequestFactory>()));
 
             services.AddTransient(
-                x => new NewFileOperationTask(new BasicProcessor[]
+                x => new CreatedFileOperationTask(new BasicProcessor[]
                 {
                     x.GetService<MetaInfoProcessor>(),
                     x.GetService<CompressionCheckProcessor>(),
@@ -71,6 +71,12 @@ namespace BackgroundAgent.Installers
                     x.GetService<SendDataProcessor>()
                 }));
 
+            services.AddTransient(
+                x => new DeletedFileOperationTask(new BasicProcessor[]
+                {
+                    x.GetService<SendDeleteProcessor>()
+                }));
+
             return services;
         }
 
@@ -86,6 +92,10 @@ namespace BackgroundAgent.Installers
             services.AddTransient<SliceProcessor>();
 
             services.AddTransient(x => new SendDataProcessor(
+                x.GetService<IRequestFactory>(),
+                x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway)));
+
+            services.AddTransient(x => new SendDeleteProcessor(
                 x.GetService<IRequestFactory>(),
                 x.GetService<IRestClientFactoryResolver>()?.Resolve(Endpoint.SyncGateway)));
         }

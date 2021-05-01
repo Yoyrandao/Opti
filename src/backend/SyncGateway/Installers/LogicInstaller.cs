@@ -33,12 +33,19 @@ namespace SyncGateway.Installers
                 })));
 
             services.AddTransient<IUpdateUserStorageService, UpdateUserStorageService>(x =>
-                new UpdateUserStorageService(new OperationTask(new BasicProcessor[]
-                {
-                    new ChangeSetApplyingProcessor(x.GetService<IFilePartRepository>(),
-                        x.GetService<IFolderRepository>(), x.GetService<IRepeater<Exception>>(),
-                        x.GetService<ITransactionFactory>(), x.GetService<IMapper>())
-                })));
+                new UpdateUserStorageService(
+                    new OperationTask(new BasicProcessor[]
+                    {
+                        new ChangeSetApplyingProcessor(x.GetService<IFilePartRepository>(),
+                            x.GetService<IFolderRepository>(), x.GetService<IRepeater<Exception>>(),
+                            x.GetService<ITransactionFactory>(), x.GetService<IMapper>())
+                    }),
+                    new OperationTask(new BasicProcessor[]
+                    {
+                        new DeletionProcessor(x.GetService<IFilePartRepository>(),
+                            x.GetService<IFolderRepository>(),
+                            x.GetService<ITransactionFactory>())
+                    })));
 
             return services;
         }

@@ -16,6 +16,8 @@ namespace DataAccess.Repositories
 
         void UpdateFilePart(string partName, string newCompressionHash, string newEncryptionHash);
 
+        void DeleteFile(string filename);
+
         FilePart GetById(int id);
 
         FilePart GetByParentId(int parentId);

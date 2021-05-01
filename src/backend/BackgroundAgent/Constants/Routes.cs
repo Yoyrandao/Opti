@@ -7,5 +7,7 @@
         public static string CheckCompression { get; } = "/check";
 
         public static string Update { get; } = "api/update";
+
+        public static string Delete { get; } = "api/delete";
     }
 }

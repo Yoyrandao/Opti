@@ -7,6 +7,8 @@
         internal static class Fs
         {
             public const string Update = Root + "/update";
+
+            public const string Delete = Root + "/delete";
         }
 
         internal static class User

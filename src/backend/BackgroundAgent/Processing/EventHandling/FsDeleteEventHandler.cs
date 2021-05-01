@@ -1,6 +1,8 @@
 ﻿using System.IO;
 
+using BackgroundAgent.Constants;
 using BackgroundAgent.Processing.Models;
+using BackgroundAgent.Processing.Tasks;
 
 using CommonTypes.Programmability;
 
@@ -10,8 +12,9 @@ namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsDeleteEventHandler : IFsDeleteEventHandler
     {
-        public FsDeleteEventHandler()
+        public FsDeleteEventHandler(DeletedFileOperationTask task)
         {
+            _task = task;
             _deleteQueue = new QueueSet<FsEvent>();
             _deleteQueue.OnPush += ProcessInternal;
         }
@@ -29,9 +32,20 @@ namespace BackgroundAgent.Processing.EventHandling
 
         #endregion
 
-        private static void ProcessInternal() { }
+        private void ProcessInternal()
+        {
+            var file = _deleteQueue.Pop();
+
+            if (file == null)
+                return;
+            
+            _logger.Information($"Processing file deletion ({file.FilePath}).");
+            _task.Process(new DeletionInfo { Identity = User.TempIdentity, Filename = file.FilePath });
+        }
 
         private volatile QueueSet<FsEvent> _deleteQueue;
+        private readonly DeletedFileOperationTask _task;
+
         private readonly ILogger _logger = Log.ForContext<FsDeleteEventHandler>();
     }
 }

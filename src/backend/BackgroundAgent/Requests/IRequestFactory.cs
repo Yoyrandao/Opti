@@ -13,5 +13,7 @@ namespace BackgroundAgent.Requests
         IRestRequest CreateCheckCompressionRequest(FileMetaInfo metaInfo);
 
         IRestRequest CreateChangeSetSendingRequest(ChangeSet changeSet);
+
+        IRestRequest CreateDeleteSetSendingRequest(DeleteSet deleteSet);
     }
 }

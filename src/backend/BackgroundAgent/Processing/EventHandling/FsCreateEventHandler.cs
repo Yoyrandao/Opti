@@ -11,7 +11,7 @@ namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsCreateEventHandler : IFsCreateEventHandler
     {
-        public FsCreateEventHandler(NewFileOperationTask task)
+        public FsCreateEventHandler(DeletedFileOperationTask task)
         {
             _task = task;
             _createQueue = new QueueSet<FsEvent>();
@@ -42,8 +42,8 @@ namespace BackgroundAgent.Processing.EventHandling
         }
 
         private volatile QueueSet<FsEvent> _createQueue;
+        private readonly DeletedFileOperationTask _task;
 
-        private readonly NewFileOperationTask _task;
         private readonly ILogger _logger = Log.ForContext<FsCreateEventHandler>();
     }
 }
