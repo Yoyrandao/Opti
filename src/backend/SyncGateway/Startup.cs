@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authentication.Certificate;
@@ -20,17 +19,14 @@ namespace SyncGateway
     {
         private IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
+        public Startup(IConfiguration configuration) => Configuration = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
             Log.Logger = new LoggerConfiguration()
                .ReadFrom.Configuration(Configuration, "Serilog")
                .CreateLogger();
-            
+
             services
                .InstallDataAccess()
                .InstallFtpDataAccess()
@@ -55,6 +51,7 @@ namespace SyncGateway
                             var certificate = context.ClientCertificate;
 
                             context.Success();
+
                             return Task.CompletedTask;
                         }
                     };
@@ -62,11 +59,12 @@ namespace SyncGateway
 
             services.AddControllers();
             services.AddAutoMapper(typeof(Startup));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SyncGateway", Version = "v1" });
             });
-            
+
             Log.ForContext<Startup>().Information("SyncGateway started.");
         }
 
@@ -81,6 +79,7 @@ namespace SyncGateway
 
             app.UseRouting();
             app.UseHttpsRedirection();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHealthChecks("/health/startup");
