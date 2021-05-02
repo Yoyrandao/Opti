@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
+using BackgroundAgent.Constants;
 using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Processing.Tasks;
 
@@ -14,11 +15,6 @@ namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsDeleteEventHandler : IFsDeleteEventHandler
     {
-        private readonly ILogger _logger = Log.ForContext<FsDeleteEventHandler>();
-        private readonly DeletedFileOperationTask _task;
-
-        private volatile QueueSet<FsEvent> _deleteQueue;
-
         public FsDeleteEventHandler(DeletedFileOperationTask task)
         {
             _task = task;
@@ -39,7 +35,7 @@ namespace BackgroundAgent.Processing.EventHandling
                 }
 
                 _logger.Information($"Processing file deletion ({file.FilePath}).");
-                // _task.Process(new DeletionInfo { Filename = file.Name, Identity = User.TempIdentity });
+                _task.Process(new DeletionInfo { Filename = file.Name, Identity = User.TempIdentity });
 
                 _deleteQueue.Pop();
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
@@ -63,5 +59,10 @@ namespace BackgroundAgent.Processing.EventHandling
         }
 
         #endregion
+        
+        private volatile QueueSet<FsEvent> _deleteQueue;
+        private readonly DeletedFileOperationTask _task;
+
+        private readonly ILogger _logger = Log.ForContext<FsDeleteEventHandler>();
     }
 }

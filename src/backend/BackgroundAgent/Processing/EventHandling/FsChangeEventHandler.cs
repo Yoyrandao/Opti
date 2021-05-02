@@ -14,11 +14,6 @@ namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsChangeEventHandler : IFsChangeEventHandler
     {
-        private readonly ILogger _logger = Log.ForContext<FsChangeEventHandler>();
-        private readonly ChangedFileOperationTask _task;
-
-        private volatile QueueSet<FsEvent> _changeQueue;
-
         public FsChangeEventHandler(ChangedFileOperationTask task)
         {
             _task = task;
@@ -39,7 +34,7 @@ namespace BackgroundAgent.Processing.EventHandling
                 }
 
                 _logger.Information($"Processing file changing ({file.FilePath}).");
-                // _task.Process(file.FilePath);
+                _task.Process(file.FilePath);
 
                 _changeQueue.Pop();
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
@@ -62,5 +57,10 @@ namespace BackgroundAgent.Processing.EventHandling
         }
 
         #endregion
+        
+        private volatile QueueSet<FsEvent> _changeQueue;
+        private readonly ChangedFileOperationTask _task;
+
+        private readonly ILogger _logger = Log.ForContext<FsChangeEventHandler>();
     }
 }

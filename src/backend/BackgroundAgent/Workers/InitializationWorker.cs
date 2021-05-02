@@ -14,14 +14,6 @@ namespace BackgroundAgent.Workers
 {
     public class InitializationWorker : BackgroundService
     {
-        private readonly IFsChangeEventHandler _changeEventHandler;
-        private readonly IFsCreateEventHandler _createEventHandler;
-        private readonly IFsDeleteEventHandler _deleteEventHandler;
-
-        private readonly FileSystemWatcher _fsWatcher;
-
-        private readonly ILogger _logger = Log.ForContext<InitializationWorker>();
-
         public InitializationWorker(
             FileSystemWatcher     fsWatcher,
             IFsChangeEventHandler changeEventHandler,
@@ -101,5 +93,13 @@ namespace BackgroundAgent.Workers
             File.WriteAllBytes(FsLocation.ApplicationEncryptionIv, encryptedIv);
             File.WriteAllBytes(FsLocation.ApplicationPrivateKey, rsaPrivateKey);
         }
+        
+        private readonly IFsChangeEventHandler _changeEventHandler;
+        private readonly IFsCreateEventHandler _createEventHandler;
+        private readonly IFsDeleteEventHandler _deleteEventHandler;
+
+        private readonly FileSystemWatcher _fsWatcher;
+
+        private readonly ILogger _logger = Log.ForContext<InitializationWorker>();
     }
 }

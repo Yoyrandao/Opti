@@ -11,11 +11,10 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 {
     public class DistinctProcessor : BasicProcessor
     {
-        private readonly IFileStateService _fileStateService;
-
-        private readonly ILogger _logger = Log.ForContext<DistinctProcessor>();
-
-        public DistinctProcessor(IFileStateService fileStateService) => _fileStateService = fileStateService;
+        public DistinctProcessor(IFileStateService fileStateService)
+        {
+            _fileStateService = fileStateService;
+        }
 
         public override void Process(object contract)
         {
@@ -39,5 +38,9 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 
             Successor?.Process(snapshot);
         }
+        
+        private readonly IFileStateService _fileStateService;
+
+        private readonly ILogger _logger = Log.ForContext<DistinctProcessor>();
     }
 }

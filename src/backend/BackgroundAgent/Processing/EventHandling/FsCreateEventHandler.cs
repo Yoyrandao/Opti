@@ -14,11 +14,6 @@ namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsCreateEventHandler : IFsCreateEventHandler
     {
-        private readonly ILogger _logger = Log.ForContext<FsCreateEventHandler>();
-        private readonly CreatedFileOperationTask _task;
-
-        private volatile QueueSet<FsEvent> _createQueue;
-
         public FsCreateEventHandler(CreatedFileOperationTask task)
         {
             _task = task;
@@ -39,7 +34,7 @@ namespace BackgroundAgent.Processing.EventHandling
                 }
 
                 _logger.Information($"Processing file creation ({file.FilePath}).");
-                // _task.Process(file.FilePath);
+                _task.Process(file.FilePath);
 
                 _createQueue.Pop();
                 await Task.Delay(TimeSpan.FromSeconds(0.5));
@@ -62,5 +57,10 @@ namespace BackgroundAgent.Processing.EventHandling
         }
 
         #endregion
+        
+        private volatile QueueSet<FsEvent> _createQueue;
+        private readonly CreatedFileOperationTask _task;
+
+        private readonly ILogger _logger = Log.ForContext<FsCreateEventHandler>();
     }
 }
