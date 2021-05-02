@@ -1,5 +1,3 @@
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Authentication.Certificate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,19 +40,6 @@ namespace SyncGateway
                .AddCertificate(options =>
                 {
                     options.AllowedCertificateTypes = CertificateTypes.All;
-
-                    options.Events = new CertificateAuthenticationEvents
-                    {
-                        OnCertificateValidated = context =>
-                        {
-                            // TODO: Figure out wtf is going on here and why i need this
-                            var certificate = context.ClientCertificate;
-
-                            context.Success();
-
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
 
             services.AddControllers();

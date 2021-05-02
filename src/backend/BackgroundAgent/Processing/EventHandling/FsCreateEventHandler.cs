@@ -20,27 +20,6 @@ namespace BackgroundAgent.Processing.EventHandling
             _createQueue = new QueueSet<FsEvent>();
         }
 
-        private async Task ProcessInternal()
-        {
-            while (true)
-            {
-                var file = _createQueue.Check();
-
-                if (file == null)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
-
-                    continue;
-                }
-
-                _logger.Information($"Processing file creation ({file.FilePath}).");
-                _task.Process(file.FilePath);
-
-                _createQueue.Pop();
-                await Task.Delay(TimeSpan.FromSeconds(0.5));
-            }
-        }
-
         #region Implementation of IFsCreateEventHandler
 
         public void OnCreated(object sender, FileSystemEventArgs ea)
@@ -57,6 +36,25 @@ namespace BackgroundAgent.Processing.EventHandling
         }
 
         #endregion
+        
+        private async Task ProcessInternal()
+        {
+            while (true)
+            {
+                var file = _createQueue.Check();
+                if (file == null)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    continue;
+                }
+
+                _logger.Information($"Processing file creation ({file.FilePath}).");
+                _task.Process(file.FilePath);
+
+                _createQueue.Pop();
+                await Task.Delay(TimeSpan.FromSeconds(0.5));
+            }
+        }
         
         private volatile QueueSet<FsEvent> _createQueue;
         private readonly CreatedFileOperationTask _task;

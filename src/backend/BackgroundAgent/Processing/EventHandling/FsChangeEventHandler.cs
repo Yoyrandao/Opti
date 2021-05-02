@@ -20,32 +20,15 @@ namespace BackgroundAgent.Processing.EventHandling
             _changeQueue = new QueueSet<FsEvent>();
         }
 
-        private async Task ProcessInternal()
-        {
-            while (true)
-            {
-                var file = _changeQueue.Check();
-
-                if (file == null)
-                {
-                    await Task.Delay(TimeSpan.FromSeconds(0.5));
-
-                    continue;
-                }
-
-                _logger.Information($"Processing file changing ({file.FilePath}).");
-                _task.Process(file.FilePath);
-
-                _changeQueue.Pop();
-                await Task.Delay(TimeSpan.FromSeconds(0.5));
-            }
-        }
-
         #region Implementation of IFsChangeEventHandler
 
         public void OnChanged(object sender, FileSystemEventArgs ea)
         {
             if (ea.ChangeType != WatcherChangeTypes.Changed)
+                return;
+
+            var fileInfo = new FileInfo(ea.FullPath);
+            if (fileInfo.LastAccessTime.Equals(fileInfo.CreationTime))
                 return;
 
             _changeQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name, EventTimestamp = DateTime.Now });
@@ -57,6 +40,25 @@ namespace BackgroundAgent.Processing.EventHandling
         }
 
         #endregion
+        
+        private async Task ProcessInternal()
+        {
+            while (true)
+            {
+                var file = _changeQueue.Check();
+                if (file == null)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+                    continue;
+                }
+
+                _logger.Information($"Processing file changing ({file.FilePath}).");
+                _task.Process(file.FilePath);
+
+                _changeQueue.Pop();
+                await Task.Delay(TimeSpan.FromSeconds(0.5));
+            }
+        }
         
         private volatile QueueSet<FsEvent> _changeQueue;
         private readonly ChangedFileOperationTask _task;
