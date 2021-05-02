@@ -2,7 +2,7 @@
 
 namespace BackgroundAgent.Processing.EventHandling
 {
-    public interface IFsChangeEventHandler
+    public interface IFsChangeEventHandler : IEventHandler
     {
         void OnChanged(object sender, FileSystemEventArgs ea);
     }

@@ -14,6 +14,14 @@ namespace BackgroundAgent.Workers
 {
     public class InitializationWorker : BackgroundService
     {
+        private readonly IFsChangeEventHandler _changeEventHandler;
+        private readonly IFsCreateEventHandler _createEventHandler;
+        private readonly IFsDeleteEventHandler _deleteEventHandler;
+
+        private readonly FileSystemWatcher _fsWatcher;
+
+        private readonly ILogger _logger = Log.ForContext<InitializationWorker>();
+
         public InitializationWorker(
             FileSystemWatcher     fsWatcher,
             IFsChangeEventHandler changeEventHandler,
@@ -30,7 +38,7 @@ namespace BackgroundAgent.Workers
         {
             InitializeApplicationStructure();
             InitializeKeys();
-            SubscribeToFilesystemEvents();
+            SubscribeToFilesystemEvents(stoppingToken);
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -52,12 +60,16 @@ namespace BackgroundAgent.Workers
             Directory.CreateDirectory(FsLocation.ApplicationTempData);
         }
 
-        private void SubscribeToFilesystemEvents()
+        private void SubscribeToFilesystemEvents(CancellationToken token)
         {
             _fsWatcher.Path = FsLocation.ApplicationData;
 
-            // _fsWatcher.Changed += _changeEventHandler.OnChanged;
-            // _fsWatcher.Created += _createEventHandler.OnCreated;
+            _changeEventHandler.Prepare(token);
+            _createEventHandler.Prepare(token);
+            _deleteEventHandler.Prepare(token);
+
+            _fsWatcher.Changed += _changeEventHandler.OnChanged;
+            _fsWatcher.Created += _createEventHandler.OnCreated;
             _fsWatcher.Deleted += _deleteEventHandler.OnDeleted;
 
             _fsWatcher.EnableRaisingEvents = true;
@@ -70,6 +82,7 @@ namespace BackgroundAgent.Workers
                 return;
 
             var rsaCryptoProvider = new RSACryptoServiceProvider();
+
             var aesCryptoProvider = new AesCryptoServiceProvider
             {
                 Mode = CipherMode.CBC, KeySize = 128, BlockSize = 128
@@ -83,18 +96,10 @@ namespace BackgroundAgent.Workers
 
             var encryptedSymmetricKey = rsaCryptoProvider.Encrypt(symmetricKey, RSAEncryptionPadding.Pkcs1);
             var encryptedIv = rsaCryptoProvider.Encrypt(iv, RSAEncryptionPadding.Pkcs1);
-            
+
             File.WriteAllBytes(FsLocation.ApplicationEncryptionKey, encryptedSymmetricKey);
             File.WriteAllBytes(FsLocation.ApplicationEncryptionIv, encryptedIv);
             File.WriteAllBytes(FsLocation.ApplicationPrivateKey, rsaPrivateKey);
         }
-
-        private readonly FileSystemWatcher _fsWatcher;
-
-        private readonly IFsChangeEventHandler _changeEventHandler;
-        private readonly IFsCreateEventHandler _createEventHandler;
-        private readonly IFsDeleteEventHandler _deleteEventHandler;
-
-        private readonly ILogger _logger = Log.ForContext<InitializationWorker>();
     }
 }

@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 using BackgroundAgent.Processing.Models;
 using BackgroundAgent.Processing.Tasks;
@@ -11,11 +14,36 @@ namespace BackgroundAgent.Processing.EventHandling
 {
     public class FsChangeEventHandler : IFsChangeEventHandler
     {
+        private readonly ILogger _logger = Log.ForContext<FsChangeEventHandler>();
+        private readonly ChangedFileOperationTask _task;
+
+        private volatile QueueSet<FsEvent> _changeQueue;
+
         public FsChangeEventHandler(ChangedFileOperationTask task)
         {
             _task = task;
             _changeQueue = new QueueSet<FsEvent>();
-            _changeQueue.OnPush += ProcessInternal;
+        }
+
+        private async Task ProcessInternal()
+        {
+            while (true)
+            {
+                var file = _changeQueue.Check();
+
+                if (file == null)
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(0.5));
+
+                    continue;
+                }
+
+                _logger.Information($"Processing file changing ({file.FilePath}).");
+                // _task.Process(file.FilePath);
+
+                _changeQueue.Pop();
+                await Task.Delay(TimeSpan.FromSeconds(0.5));
+            }
         }
 
         #region Implementation of IFsChangeEventHandler
@@ -25,25 +53,14 @@ namespace BackgroundAgent.Processing.EventHandling
             if (ea.ChangeType != WatcherChangeTypes.Changed)
                 return;
 
-            _changeQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name });
+            _changeQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name, EventTimestamp = DateTime.Now });
+        }
+
+        public void Prepare(CancellationToken token)
+        {
+            Task.Run(ProcessInternal, token);
         }
 
         #endregion
-
-        private void ProcessInternal()
-        {
-            var file = _changeQueue.Pop();
-
-            if (file == null)
-                return;
-            
-            _logger.Information($"Processing file changing ({file.FilePath}).");
-            _task.Process(file.FilePath);
-        }
-
-        private volatile QueueSet<FsEvent> _changeQueue;
-        private readonly ChangedFileOperationTask _task;
-
-        private readonly ILogger _logger = Log.ForContext<FsChangeEventHandler>();
     }
 }

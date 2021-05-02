@@ -26,9 +26,9 @@ namespace BackgroundAgent.Installers
             services.AddTransient<ISymmentricalCryptoService, SymmetricalCryptoService>();
             services.AddTransient<IAsymmetricalCryptoService, AssymentricalCryptoService>();
 
-            services.AddTransient<IFsChangeEventHandler, FsChangeEventHandler>();
-            services.AddTransient<IFsCreateEventHandler, FsCreateEventHandler>();
-            services.AddTransient<IFsDeleteEventHandler, FsDeleteEventHandler>();
+            services.AddSingleton<IFsChangeEventHandler, FsChangeEventHandler>();
+            services.AddSingleton<IFsCreateEventHandler, FsCreateEventHandler>();
+            services.AddSingleton<IFsDeleteEventHandler, FsDeleteEventHandler>();
 
             services.AddTransient<IFileEntropyCalculator, FileEntropyCalculator>();
             services.AddTransient<IFileMetaInformationProvider, FileMetaInformationProvider>();
