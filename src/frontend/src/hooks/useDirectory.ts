@@ -1,8 +1,9 @@
-import { readdir, watch } from 'fs-extra';
+import { watch } from 'fs-extra';
 import { join, extname } from 'path';
 import { useEffect, useState } from 'react';
 import { error } from 'electron-log';
 import { FileInfo, FileType } from '../models/fileInfo';
+import { handleFilesFromDirectory } from '../helpers/fsAdapter';
 
 export const useDirectory = (dir: string) => {
   const [state, setState] = useState<FileInfo[]>([]);
@@ -42,7 +43,7 @@ export const useDirectory = (dir: string) => {
   };
 
   const updateDirectoryInfo = () => {
-    readdir(dir, (err, files) => {
+    handleFilesFromDirectory(dir, (err, files) => {
       if (err) {
         setState([]);
         error('cannot read directory');
