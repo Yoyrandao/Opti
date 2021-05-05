@@ -1,5 +1,5 @@
 import { shell } from 'electron';
-import { readdir, unlink, rename as rn } from 'fs-extra';
+import { readdir, unlink, rename as rn, move } from 'fs-extra';
 import { join } from 'path';
 
 const handleFilesFromDirectory = (
@@ -22,4 +22,9 @@ const open = (path: string) => {
   shell.openPath(path);
 };
 
-export { handleFilesFromDirectory, deleteFile, rename, open };
+const moveFile = (oldPath: string, folder: string) => {
+  const filename = oldPath.replace(/^.*[\\/]/, '');
+  move(oldPath, join(folder, filename));
+};
+
+export { handleFilesFromDirectory, deleteFile, rename, open, moveFile };

@@ -11,11 +11,13 @@ import styles from './index.css';
 interface ContextMenuProps {
   id: string;
   path: string;
+  extension: string;
 }
 
 const ContextMenu = ({
   id,
   path,
+  extension,
   children,
 }: React.PropsWithChildren<ContextMenuProps>) => {
   const { deleteFile, open, rename } = useAdapter(path);
@@ -34,7 +36,7 @@ const ContextMenu = ({
         </MenuItem>
         <MenuItem
           data={{ path }}
-          onClick={() => rename('a.txt')}
+          onClick={() => rename(`a${extension}`)}
           className={styles.contextMenuItem}
         >
           Rename
