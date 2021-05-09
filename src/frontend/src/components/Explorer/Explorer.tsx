@@ -6,8 +6,6 @@ import { useDirectory } from '../../hooks/useDirectory';
 import { ContextMenu } from '../ContextMenu';
 import { DirectoryItem } from '../DirectoryItem';
 
-import styles from './index.css';
-
 interface ExplorerProps {
   directory: string;
 }
@@ -31,7 +29,7 @@ const Explorer: React.FC<ExplorerProps> = ({ directory }: ExplorerProps) => {
   return (
     <>
       <div
-        className={isDragActive ? styles.containerBlurred : styles.container}
+        className={isDragActive ? 'containerBlurred' : 'container'}
         {...getRootProps()}
       >
         <input {...getInputProps()} />

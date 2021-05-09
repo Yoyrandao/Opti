@@ -3,8 +3,6 @@
 import React from 'react';
 import { FileInfo } from '../../models/fileInfo';
 
-import styles from './index.css';
-
 import excelIcon from '../../../assets/types/excel.png';
 import docIcon from '../../../assets/types/docx.png';
 import textIcon from '../../../assets/types/text.png';
@@ -23,32 +21,22 @@ const DirectoryItem: React.FC<DirectoryItemProps> = ({
   const resolveItemContent = (fileInfo: FileInfo) => {
     switch (fileInfo.type) {
       case 'image':
-        return (
-          <img className={styles.itemImage} src={info.path} alt={info.name} />
-        );
+        return <img className="itemImage" src={info.path} alt={info.name} />;
       case 'excel':
-        return (
-          <img className={styles.itemImage} src={excelIcon} alt={info.name} />
-        );
+        return <img className="itemImage" src={excelIcon} alt={info.name} />;
       case 'doc':
-        return (
-          <img className={styles.itemImage} src={docIcon} alt={info.name} />
-        );
+        return <img className="itemImage" src={docIcon} alt={info.name} />;
       case 'text':
-        return (
-          <img className={styles.itemImage} src={textIcon} alt={info.name} />
-        );
+        return <img className="itemImage" src={textIcon} alt={info.name} />;
       default:
-        return (
-          <img className={styles.itemImage} src={unknownIcon} alt={info.name} />
-        );
+        return <img className="itemImage" src={unknownIcon} alt={info.name} />;
     }
   };
 
   return (
-    <div className={styles.itemContainer} onDoubleClick={open}>
-      <div className={styles.itemContent}>{resolveItemContent(info)}</div>
-      <div className={styles.itemContentWithMargin}>{info.name}</div>
+    <div className="itemContainer" onDoubleClick={open}>
+      <div className="itemContent">{resolveItemContent(info)}</div>
+      <div className="itemContentWithMargin">{info.name}</div>
     </div>
   );
 };

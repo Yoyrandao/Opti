@@ -1,19 +1,20 @@
 import React from 'react';
+import { homedir } from 'os';
+import { join } from 'path';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Explorer } from '../components';
 
 import './App.global.css';
-import styles from './App.css';
 
 const Application = () => {
   return (
-    <div className={styles.applicationContainer}>
-      <div className={styles.leftPanel}>
-        <div className={styles.logo}>Opti Manager</div>
-        <div className={styles.user}>aaron</div>
+    <div className="applicationContainer">
+      <div className="leftPanel">
+        <div className="logo">Opti Manager</div>
+        <div className="user">aaron</div>
       </div>
-      <div className={styles.explorer}>
-        <Explorer directory={`${process.env.HOME}\\.opti\\data`} />
+      <div className="explorer">
+        <Explorer directory={join(homedir(), '.opti', 'data')} />
       </div>
     </div>
   );

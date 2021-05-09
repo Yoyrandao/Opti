@@ -6,8 +6,6 @@ import {
 } from 'react-contextmenu';
 import { useAdapter } from '../../hooks/useAdapter';
 
-import styles from './index.css';
-
 interface ContextMenuProps {
   id: string;
   path: string;
@@ -26,25 +24,21 @@ const ContextMenu = ({
     <>
       <ContextMenuTrigger id={id}>{children}</ContextMenuTrigger>
 
-      <Menu id={id} className={styles.contextMenu}>
-        <MenuItem
-          data={{ path }}
-          onClick={open}
-          className={styles.contextMenuItem}
-        >
+      <Menu id={id} className="contextMenu">
+        <MenuItem data={{ path }} onClick={open} className="contextMenuItem">
           Open
         </MenuItem>
         <MenuItem
           data={{ path }}
           onClick={() => rename(`a${extension}`)}
-          className={styles.contextMenuItem}
+          className="contextMenuItem"
         >
           Rename
         </MenuItem>
         <MenuItem
           data={{ path }}
           onClick={deleteFile}
-          className={styles.contextMenuItem}
+          className="contextMenuItem"
         >
           Delete
         </MenuItem>
