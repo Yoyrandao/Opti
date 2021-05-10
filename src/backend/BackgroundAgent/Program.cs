@@ -16,7 +16,7 @@ namespace BackgroundAgent
                .ConfigureAppConfiguration((context, configurationBuilder) =>
                 {
                     configurationBuilder.Sources.Clear();
-
+                    
                     configurationBuilder
                        .SetBasePath(context.HostingEnvironment.ContentRootPath)
                        .AddJsonFile("appsettings.json", true, true)

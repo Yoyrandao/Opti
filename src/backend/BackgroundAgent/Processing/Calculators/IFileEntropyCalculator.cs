@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace BackgroundAgent.Processing.Logic.Calculators
+namespace BackgroundAgent.Processing.Calculators
 {
     public interface IFileEntropyCalculator
     {

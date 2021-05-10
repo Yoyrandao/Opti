@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace BackgroundAgent.Processing.Logic.Calculators
+namespace BackgroundAgent.Processing.Calculators
 {
     public class FileEntropyCalculator : IFileEntropyCalculator
     {

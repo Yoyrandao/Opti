@@ -1,8 +1,7 @@
 ﻿using System.IO;
 
+using BackgroundAgent.Processing.Calculators;
 using BackgroundAgent.Processing.EventHandling;
-using BackgroundAgent.Processing.Logic;
-using BackgroundAgent.Processing.Logic.Calculators;
 using BackgroundAgent.Processing.Services;
 using BackgroundAgent.Processing.Tasks;
 using BackgroundAgent.Processing.Tasks.Processors;
@@ -31,7 +30,6 @@ namespace BackgroundAgent.Installers
             services.AddSingleton<IFsDeleteEventHandler, FsDeleteEventHandler>();
 
             services.AddTransient<IFileEntropyCalculator, FileEntropyCalculator>();
-            services.AddTransient<IFileMetaInformationProvider, FileMetaInformationProvider>();
 
             services.AddSingleton<FileSystemWatcher>();
 

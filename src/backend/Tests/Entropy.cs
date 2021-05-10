@@ -1,4 +1,4 @@
-using BackgroundAgent.Processing.Logic.Calculators;
+using BackgroundAgent.Processing.Calculators;
 
 using NUnit.Framework;
 

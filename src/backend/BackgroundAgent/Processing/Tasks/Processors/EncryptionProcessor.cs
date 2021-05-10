@@ -14,8 +14,10 @@ namespace BackgroundAgent.Processing.Tasks.Processors
 {
     public class EncryptionProcessor : BasicProcessor
     {
-        public EncryptionProcessor(IAsymmetricalCryptoService rsaCryptoService,
-                                   ISymmentricalCryptoService aesCryptoService, IHashProvider hashProvider)
+        public EncryptionProcessor(
+            IAsymmetricalCryptoService rsaCryptoService,
+            ISymmentricalCryptoService aesCryptoService, 
+            IHashProvider hashProvider)
         {
             _rsaCryptoService = rsaCryptoService;
             _aesCryptoService = aesCryptoService;
