@@ -1,0 +1,11 @@
+CREATE TABLE [dbo].[User]
+(
+  [Id] INT NOT NULL IDENTITY(1,1),
+  [AccountUid] UNIQUEIDENTIFIER NOT NULL,
+  [Login] VARCHAR(255) NOT NULL,
+  [Folder] VARCHAR(255) NOT NULL,
+  [CreationTimestamp] DATETIME NOT NULL,
+  [ModificationTimestamp] DATETIME NOT NULL
+  CONSTRAINT PK_User_Id PRIMARY KEY CLUSTERED ([Id]),
+  CONSTRAINT UK_Login UNIQUE([Login])
+)
