@@ -64,6 +64,14 @@ namespace FtpDataAccess.Helpers
             using var response = (FtpWebResponse) request.GetResponse();
         }
 
+        public long GetFileSize(string path)
+        {
+            var request = _requestFactory.CreateFor(path).With(WebRequestMethods.Ftp.GetFileSize).Build();
+            using var response = (FtpWebResponse) request.GetResponse();
+
+            return response.ContentLength;
+        }
+
         public bool IsDirectoryExists(string path)
         {
             var isExists = false;

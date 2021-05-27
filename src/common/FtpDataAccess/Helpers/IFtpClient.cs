@@ -16,5 +16,7 @@ namespace FtpDataAccess.Helpers
         void CreateDirectory(string path);
         
         bool IsDirectoryExists(string path);
+
+        long GetFileSize(string path);
     }
 }

@@ -17,5 +17,10 @@
             
             public const string ResourceState = Root + "/filestate";
         }
+
+        internal static class Info
+        {
+            public const string FileSize = Root + "/info/size";
+        }
     }
 }

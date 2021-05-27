@@ -21,29 +21,29 @@ const ContextMenu = ({
   const { deleteFile, open, rename } = useAdapter(path);
 
   return (
-    <>
+    <div style={{ width: '80%', height: '60px' }}>
       <ContextMenuTrigger id={id}>{children}</ContextMenuTrigger>
 
       <Menu id={id} className="contextMenu">
         <MenuItem data={{ path }} onClick={open} className="contextMenuItem">
-          Open
+          Открыть
         </MenuItem>
         <MenuItem
           data={{ path }}
           onClick={() => rename(`a${extension}`)}
           className="contextMenuItem"
         >
-          Rename
+          Переименовать
         </MenuItem>
         <MenuItem
           data={{ path }}
           onClick={deleteFile}
           className="contextMenuItem"
         >
-          Delete
+          Удалить
         </MenuItem>
       </Menu>
-    </>
+    </div>
   );
 };
 

@@ -16,7 +16,7 @@ interface DirectoryItemProps {
 const DirectoryItem: React.FC<DirectoryItemProps> = ({
   info,
 }: DirectoryItemProps) => {
-  const { open } = useAdapter(info.path);
+  const { open, getSize } = useAdapter(info.path);
 
   const resolveItemContent = (fileInfo: FileInfo) => {
     switch (fileInfo.type) {
@@ -36,7 +36,12 @@ const DirectoryItem: React.FC<DirectoryItemProps> = ({
   return (
     <div className="itemContainer" onDoubleClick={open}>
       <div className="itemContent">{resolveItemContent(info)}</div>
-      <div className="itemContentWithMargin">{info.name}</div>
+      <div className="itemContentContainer">
+        <div className="itemContentWithMargin">{info.name}</div>
+        <div className="itemContentWithMargin">{`${Math.floor(
+          getSize() / 1024
+        )} КБ`}</div>
+      </div>
     </div>
   );
 };

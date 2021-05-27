@@ -1,5 +1,5 @@
 import { shell } from 'electron';
-import { readdir, unlink, rename as rn, move } from 'fs-extra';
+import { readdir, unlink, rename as rn, move, statSync } from 'fs-extra';
 import { join } from 'path';
 
 const handleFilesFromDirectory = (
@@ -27,4 +27,15 @@ const moveFile = (oldPath: string, folder: string) => {
   move(oldPath, join(folder, filename));
 };
 
-export { handleFilesFromDirectory, deleteFile, rename, open, moveFile };
+const getSize = (path: string): number => {
+  return statSync(path).size;
+};
+
+export {
+  handleFilesFromDirectory,
+  deleteFile,
+  rename,
+  open,
+  moveFile,
+  getSize,
+};

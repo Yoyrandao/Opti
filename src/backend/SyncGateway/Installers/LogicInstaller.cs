@@ -23,6 +23,8 @@ namespace SyncGateway.Installers
         {
             services.AddTransient<IFileProcessor, FileProcessor>();
 
+            services.AddTransient<IFileInfoService, FileInfoService>();
+
             services.AddTransient<IUserRegistrationService, UserRegistrationService>(x =>
                 new UserRegistrationService(new OperationTask(new BasicProcessor[]
                 {

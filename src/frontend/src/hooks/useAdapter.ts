@@ -1,4 +1,10 @@
-import { deleteFile, open, rename, moveFile } from '../helpers/fsAdapter';
+import {
+  deleteFile,
+  open,
+  rename,
+  moveFile,
+  getSize,
+} from '../helpers/fsAdapter';
 
 export const useAdapter = (path: string) => {
   return {
@@ -6,5 +12,6 @@ export const useAdapter = (path: string) => {
     open: () => open(path),
     rename: (newName: string) => rename(path, newName),
     move: (oldPath: string) => moveFile(oldPath, path),
+    getSize: () => getSize(path),
   };
 };

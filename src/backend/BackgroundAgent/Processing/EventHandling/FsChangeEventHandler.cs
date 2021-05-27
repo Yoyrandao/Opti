@@ -28,7 +28,7 @@ namespace BackgroundAgent.Processing.EventHandling
                 return;
 
             var fileInfo = new FileInfo(ea.FullPath);
-            if (fileInfo.LastAccessTime.Equals(fileInfo.CreationTime))
+            if (fileInfo.LastAccessTime - fileInfo.CreationTime < TimeSpan.FromSeconds((2)))
                 return;
 
             _changeQueue.Push(new FsEvent { FilePath = ea.FullPath, Name = ea.Name, EventTimestamp = DateTime.Now });

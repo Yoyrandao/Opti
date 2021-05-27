@@ -26,6 +26,11 @@ namespace FtpDataAccess.Repositories
             _ftpClient.DeleteFile(Path.Join(folder, filename));
         }
 
+        public long GetFileSize(string filename, string folder)
+        {
+            return _ftpClient.GetFileSize(Path.Join(folder, filename));
+        }
+
         public IEnumerable<File> GetFiles(string folder)
         {
             return _ftpClient.GetListing(folder);

@@ -11,6 +11,8 @@ namespace FtpDataAccess.Repositories
 
         void RemoveFile(string filename, string folder);
 
+        long GetFileSize(string filename, string folder);
+
         IEnumerable<File> GetFiles(string folder);
     }
 }

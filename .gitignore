@@ -6,6 +6,7 @@
 # Python ml model creating
 src/tools/dataset_creator/sources/
 src/tools/dataset_creator/sources/images/
+src/tools/dataset_creator/images/
 src/tools/dataset_creator/test/
 src/tools/dataset_creator/main/
 src/tools/dataset_creator/sources/images/*.png
@@ -507,3 +508,5 @@ npm-debug.log.*
 *.sass.d.ts
 *.scss.d.ts
 
+*.crt
+*.crt
