@@ -52,7 +52,7 @@ namespace BackgroundAgent.Processing.Tasks.Processors
                         EncryptionHash = x.EncryptionHash,
                         CompressionHash = x.CompressionHash,
                         BaseFileName = snapshot.BaseFileName,
-                        Base64Content = Convert.ToBase64String(Encoding.UTF8.GetBytes(partContent))
+                        Base64Content = Convert.ToBase64String(Encoding.ASCII.GetBytes(partContent))
                     };
                 }).ToList()
             };

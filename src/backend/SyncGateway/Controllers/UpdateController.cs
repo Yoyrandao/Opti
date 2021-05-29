@@ -28,6 +28,7 @@ namespace SyncGateway.Controllers
         }
 
         [HttpPost]
+        [DisableRequestSizeLimit]
         [Route(Routes.Fs.Update)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
