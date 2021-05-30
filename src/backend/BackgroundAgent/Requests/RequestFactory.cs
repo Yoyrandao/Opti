@@ -21,6 +21,17 @@ namespace BackgroundAgent.Requests
 
             return request;
         }
+        
+        public IRestRequest CreateGetFileInfoRequest(string filename)
+        {
+            var request = new RestRequest(Method.GET)
+            {
+                Resource = Routes.Info
+            };
+            request.AddParameter("filename", filename);
+
+            return request;
+        }
 
         public IRestRequest CreateCheckCompressionRequest(FileMetaInfo metaInfo)
         {

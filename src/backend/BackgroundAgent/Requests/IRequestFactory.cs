@@ -15,5 +15,7 @@ namespace BackgroundAgent.Requests
         IRestRequest CreateChangeSetSendingRequest(ChangeSet changeSet);
 
         IRestRequest CreateDeleteSetSendingRequest(DeleteSet deleteSet);
+
+        IRestRequest CreateGetFileInfoRequest(string filename);
     }
 }

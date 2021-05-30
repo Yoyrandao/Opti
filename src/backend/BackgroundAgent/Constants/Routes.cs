@@ -9,5 +9,7 @@
         public static string Update { get; } = "api/update";
 
         public static string Delete { get; } = "api/delete";
+        
+        public static string Info { get; } = "api/info/size";
     }
 }

@@ -34,15 +34,18 @@ const DirectoryItem: React.FC<DirectoryItemProps> = ({
   };
 
   return (
-    <div className="itemContainer" onDoubleClick={open}>
-      <div className="itemContent">{resolveItemContent(info)}</div>
-      <div className="itemContentContainer">
-        <div className="itemContentWithMargin">{info.name}</div>
-        <div className="itemContentWithMargin">{`${Math.floor(
-          getSize() / 1024
-        )} КБ`}</div>
+    <>
+      <div className="itemContainer" onDoubleClick={open}>
+        <div className="itemContent">{resolveItemContent(info)}</div>
+        <div className="itemContentContainer">
+          <div className="itemContentWithMargin">{info.name}</div>
+          <div className="itemContentWithMargin">{`${Math.floor(
+            getSize() / 1024
+          )} КБ`}</div>
+        </div>
       </div>
-    </div>
+      <hr />
+    </>
   );
 };
 

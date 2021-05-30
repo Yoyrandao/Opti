@@ -4,8 +4,8 @@ using NUnit.Framework;
 
 namespace Tests
 {
-    [Category("Unit")]
-    public class EntropyTests
+    [Category("BlackBox")]
+    public class BlackBoxTests
     {
         [SetUp]
         public void Setup()
@@ -14,17 +14,23 @@ namespace Tests
         }
         
         [Test]
-        public void EntopyTest()
+        public void FileCreationTest()
         {
             Assert.IsTrue(true);
         }
         
         [Test]
-        public void Entopy_NoFileTest()
+        public void FileDeletionTest()
         {
             Assert.IsTrue(true);
         }
 
+        [Test]
+        public void FileChangingTest()
+        {
+            Assert.IsTrue(true);
+        }
+        
         private IFileEntropyCalculator _entropyCalculator;
     }
 }
